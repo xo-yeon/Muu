@@ -1,0 +1,16 @@
+#!/bin/sh
+set -eu
+
+if [ ! -f package.json ]; then
+  echo "pre-commit: package.json not found; skipping npm validation."
+  exit 0
+fi
+
+echo "pre-commit: running lint"
+npm run lint
+
+echo "pre-commit: running build"
+npm run build
+
+echo "pre-commit: running test"
+npm run test
