@@ -1,21 +1,66 @@
-# 프로젝트: {프로젝트명}
+# 프로젝트: Muu
 
 ## 기술 스택
-- {프레임워크 (예: Next.js 15)}
-- {언어 (예: TypeScript strict mode)}
-- {스타일링 (예: Tailwind CSS)}
+
+- Next.js App Router
+- TypeScript strict mode
+- CSS Modules
+- Vitest
+- localStorage
+
+## 제품 방향
+
+- Muu는 오늘의 감정과 행동 패턴을 바탕으로 인간 유형과 상태 리포트를 보여주는 모바일 퍼스트 앱이다.
+- UI는 귀여운 도트/픽셀 감성의 2D 게임 UI를 유지한다.
+- 결과 문구는 현실적이고 약간 직설적인 톤을 유지한다.
+- 과한 위로, 치료/진단 표현, 사용자를 비난하는 문구는 사용하지 않는다.
 
 ## 아키텍처 규칙
-- CRITICAL: {절대 지켜야 할 규칙 1 (예: 모든 API 로직은 app/api/ 라우트 핸들러에서만 처리)}
-- CRITICAL: {절대 지켜야 할 규칙 2 (예: 클라이언트 컴포넌트에서 직접 외부 API를 호출하지 말 것)}
-- {일반 규칙 (예: 컴포넌트는 components/ 폴더에, 타입은 types/ 폴더에 분리)}
+
+- CRITICAL: 같은 입력은 항상 같은 결과를 반환해야 한다. 분석 로직에 랜덤값, 시간값, 비결정적 API 응답을 섞지 않는다.
+- CRITICAL: 인간 유형 결정은 룰 기반 분석이 담당한다. AI는 유형 자체를 변경하면 안 된다.
+- CRITICAL: OpenAI API 호출은 클라이언트 컴포넌트에서 직접 하지 않는다. `src/app/api/` route handler에서만 `OPENAI_API_KEY`를 사용한다.
+- CRITICAL: 분석 로직은 UI 컴포넌트에 직접 섞지 말고 `src/lib/analysis.ts`처럼 테스트 가능한 순수 함수로 유지한다.
+- 질문, 선택지, 감정 태그 데이터는 `src/data/`에서 관리한다.
+- 도메인 타입은 `src/types/`에서 관리한다.
+- UI 컴포넌트는 `src/components/`에 둔다.
+- 페이지 진입점과 라우트는 `src/app/`에 둔다.
+- 현재 MVP 저장소는 localStorage이며, 서버 DB나 로그인 전제를 코드에 넣지 않는다.
+
+## UI 규칙
+
+- 모바일 퍼스트로 구현한다.
+- 앱 화면은 최소 360px, 최대 430px 모바일 프레임을 기준으로 한다.
+- 데스크톱에서는 모바일 프레임을 중앙 배치한다.
+- 주요 카드와 버튼은 픽셀 스타일의 각진 border, hard shadow를 사용한다.
+- CSS는 CSS Modules를 우선 사용한다.
+- Tailwind CSS, styled-components 등 새 스타일링 도구는 필요가 생기기 전까지 추가하지 않는다.
+- 결과 페이지에는 인간 유형, 상태 요약, 감정 날씨, 팩트 한 줄, 오늘의 인간 유지 행동, 픽셀 캐릭터를 유지한다.
 
 ## 개발 프로세스
-- CRITICAL: 새 기능 구현 시 반드시 테스트를 먼저 작성하고, 테스트가 통과하는 구현을 작성할 것 (TDD)
-- 커밋 메시지는 conventional commits 형식을 따를 것 (feat:, fix:, docs:, refactor:)
 
-## 명령어
+- CRITICAL: 새 기능이나 분석 규칙 변경 시 먼저 테스트 가능 지점을 확인하고, 위험도가 있는 로직은 Vitest 테스트를 추가한다.
+- 변경 범위는 요청된 작업에 필요한 만큼만 제한한다.
+- 기존 문서인 `docs/PRD.md`, `docs/ARCHITECTURE.md`, `docs/ADR.md`와 충돌하는 구현을 하지 않는다. 필요하면 문서를 함께 업데이트한다.
+- 커밋 메시지는 conventional commits 형식을 따른다. 예: `feat:`, `fix:`, `docs:`, `refactor:`, `test:`.
+- 사용자 변경사항을 임의로 되돌리지 않는다.
+
+## 검증 명령어
+
+```txt
 npm run dev      # 개발 서버
 npm run build    # 프로덕션 빌드
 npm run lint     # ESLint
-npm run test     # 테스트
+npm run test     # Vitest
+```
+
+## 현재 MVP 범위
+
+- Home 화면
+- 15개 질문 플로우
+- 감정 태그 선택
+- 자유 입력
+- 룰 기반 인간 유형 분석
+- OpenAI API 기반 보조 관찰
+- 결과 페이지
+- localStorage 최근 결과 저장/복원

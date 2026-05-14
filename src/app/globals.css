@@ -1,0 +1,50 @@
+@font-face {
+  font-family: 'DungGeunMo';
+  src: url('/assets/fonts/DungGeunMo.woff2') format('woff2'),
+       url('/assets/fonts/DungGeunMo.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --bg-mint: #ddf8e8;
+  --bg-cream: #fff6cf;
+  --bg-lavender: #eee3ff;
+  --bg-pink: #ffd9e8;
+  --bg-blue: #cdeeff;
+  --primary-purple: #5b3fd6;
+  --deep-purple: #2f1e8a;
+  --hot-pink: #ff6fae;
+  --pixel-cyan: #55dde0;
+  --pixel-yellow: #ffd95a;
+  --pixel-green: #72d66b;
+  --pixel-orange: #ff9f45;
+  --ink: #2b235a;
+  --muted: #7c72a8;
+  --white: #ffffff;
+  --font-pixel: 'DungGeunMo', 'Courier New', monospace;
+  --font-body: 'Pretendard', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  min-width: 360px;
+  min-height: 100%;
+  margin: 0;
+}
+
+body {
+  color: var(--ink);
+  background-color: var(--bg-blue);
+  font-family: var(--font-body);
+}
+
+button,
+textarea {
+  font: inherit;
+}

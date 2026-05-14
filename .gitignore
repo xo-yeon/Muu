@@ -12,3 +12,7 @@ phases/**/step*-output.json
 
 # Codex hook runtime state
 .codex/tdd-guard/data/*.json
+
+
+.env
+.env.*

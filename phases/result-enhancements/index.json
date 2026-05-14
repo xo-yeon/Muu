@@ -1,0 +1,48 @@
+{
+  "project": "Muu",
+  "phase": "result-enhancements",
+  "steps": [
+    {
+      "step": 0,
+      "name": "result-model",
+      "status": "completed",
+      "summary": "HumanResult에 forbiddenAction, rewardItem, comparison 타입 계약 추가"
+    },
+    {
+      "step": 1,
+      "name": "analysis-templates",
+      "status": "completed",
+      "summary": "모든 분석 결과 템플릿에 금지 행동과 보상 아이템 추가"
+    },
+    {
+      "step": 2,
+      "name": "result-history",
+      "status": "completed",
+      "summary": "최근 결과 히스토리 저장 유틸과 localStorage 연동 추가"
+    },
+    {
+      "step": 3,
+      "name": "result-comparison",
+      "status": "completed",
+      "summary": "직전 결과와 현재 결과를 비교하는 순수 함수 및 저장 연동 추가"
+    },
+    {
+      "step": 4,
+      "name": "result-ui",
+      "status": "completed",
+      "summary": "결과 화면에 금지 행동, 획득 아이템, 지난 결과 비교 섹션 추가"
+    },
+    {
+      "step": 5,
+      "name": "home-history-ui",
+      "status": "completed",
+      "summary": "홈 화면에 히스토리 개수 표시와 홈 도트 GIF fallback 추가"
+    },
+    {
+      "step": 6,
+      "name": "tests-and-validation",
+      "status": "completed",
+      "summary": "결과 강화 기능 테스트 보강 및 test/lint/build 검증 완료"
+    }
+  ]
+}
