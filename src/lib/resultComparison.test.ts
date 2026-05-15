@@ -50,7 +50,7 @@ describe('buildResultComparison', () => {
     const previous = makeResult({ id: 'futureBuffering', dominantAxes: ['anxiety', 'burnout', 'avoidance'] });
 
     expect(buildResultComparison(current, previous)).toEqual({
-      label: '주요 신호 반복',
+      label: '반복 패턴',
       summary: '방전 신호가 다시 올라왔습니다. 패턴이 조용히 재방문했습니다.'
     });
   });

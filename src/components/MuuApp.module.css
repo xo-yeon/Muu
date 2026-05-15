@@ -105,7 +105,6 @@
 .kicker,
 .counter,
 .memoCount,
-.miniPanel span,
 .factBubble span,
 .recentCard span,
 .recentCard small,
@@ -163,8 +162,7 @@
 .resultHero,
 .panel,
 .aiPanel,
-.emptyRecent,
-.miniPanel {
+.emptyRecent {
   border: 3px solid var(--primary-purple);
   background: var(--bg-cream);
   box-shadow: 5px 5px 0 var(--deep-purple);
@@ -506,25 +504,6 @@
   font-family: var(--font-pixel);
   font-size: 17px;
   font-weight: 900;
-  line-height: 1.45;
-}
-
-.twoColumn {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-}
-
-.miniPanel {
-  display: grid;
-  gap: 8px;
-  min-height: 104px;
-  padding: 12px;
-}
-
-.miniPanel strong {
-  color: var(--deep-purple);
-  font-size: 14px;
   line-height: 1.45;
 }
 

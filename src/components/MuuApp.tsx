@@ -392,12 +392,8 @@ function ResultScreen({
       </article>
 
       <section className={styles.panel}>
-        <h2>상태 요약</h2>
-        <ul>
-          {result.statusSummary.map((item) => (
-            <li key={item}>{item}</li>
-          ))}
-        </ul>
+        <h2>오늘의 인간 유지 행동</h2>
+        <p>{result.action}</p>
       </section>
 
       <section className={styles.factBubble}>
@@ -410,16 +406,29 @@ function ResultScreen({
         <p>{forbiddenAction}</p>
       </section>
 
-      <div className={styles.twoColumn}>
-        <section className={styles.miniPanel}>
-          <span>감정 날씨</span>
-          <strong>{result.emotionWeather}</strong>
+      {result.comparison && (
+        <section className={styles.comparePanel}>
+          <span>{result.comparison.label}</span>
+          <p>{result.comparison.summary}</p>
         </section>
-        <section className={styles.miniPanel}>
-          <span>주요 신호</span>
-          <strong>{result.dominantAxes.map(axisLabel).join(' / ')}</strong>
+      )}
+
+      <section className={styles.panel}>
+        <h2>상태 요약</h2>
+        <ul>
+          {result.statusSummary.map((item) => (
+            <li key={item}>{item}</li>
+          ))}
+        </ul>
+      </section>
+
+      {result.aiObservation && (
+        <section className={styles.aiPanel}>
+          <h2>AI 관찰</h2>
+          <p>{result.aiObservation}</p>
         </section>
-      </div>
+      )}
+      {analysisError && <p className={styles.inlineError}>{analysisError}</p>}
 
       <section className={styles.itemPanel}>
         <PixelAsset
@@ -434,26 +443,6 @@ function ResultScreen({
           <p>{rewardItem.description}</p>
         </div>
       </section>
-
-      {result.comparison && (
-        <section className={styles.comparePanel}>
-          <span>{result.comparison.label}</span>
-          <p>{result.comparison.summary}</p>
-        </section>
-      )}
-
-      <section className={styles.panel}>
-        <h2>오늘의 인간 유지 행동</h2>
-        <p>{result.action}</p>
-      </section>
-
-      {result.aiObservation && (
-        <section className={styles.aiPanel}>
-          <h2>AI 관찰</h2>
-          <p>{result.aiObservation}</p>
-        </section>
-      )}
-      {analysisError && <p className={styles.inlineError}>{analysisError}</p>}
 
       <button className={styles.primaryButton} type="button" onClick={onRestart}>
         다시 하기
@@ -535,22 +524,6 @@ function PixelCharacter({ body, mood, size }: { body: string; mood: string; size
       <span className={styles.mouth} />
     </div>
   );
-}
-
-function axisLabel(axis: string) {
-  const labels: Record<string, string> = {
-    overthinking: '생각 과열',
-    avoidance: '회피',
-    burnout: '방전',
-    anxiety: '불안',
-    execution: '실행',
-    socialFatigue: '사회 배터리',
-    emotionalSensitivity: '감정 습도',
-    stability: '안정',
-    dopamineSeeking: '자극 찾기'
-  };
-
-  return labels[axis] ?? axis;
 }
 
 function formatSavedDate(value: string) {
