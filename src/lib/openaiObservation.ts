@@ -1,7 +1,7 @@
 import type { HumanResult, MuuSubmission } from '@/types/muu';
 
 const openaiResponsesUrl = 'https://api.openai.com/v1/responses';
-const defaultModel = 'gpt-5.4-mini';
+const defaultModel = 'gpt-4.1-mini';
 
 type OpenAiObservationInput = {
   submission: MuuSubmission;
@@ -49,7 +49,7 @@ export async function generateOpenAiObservation(
 
   const data: unknown = await response.json();
   const outputText = extractResponseText(data);
-  const parsed = JSON.parse(outputText) as Partial<OpenAiObservationResponse>;
+  const parsed = parseObservationResponse(outputText);
   const observation = parsed.observation?.trim();
 
   if (!observation) {
@@ -134,6 +134,20 @@ export function extractResponseText(data: unknown): string {
   }
 
   throw new Error('OpenAI response text was not found.');
+}
+
+export function parseObservationResponse(outputText: string): Partial<OpenAiObservationResponse> {
+  try {
+    return JSON.parse(outputText) as Partial<OpenAiObservationResponse>;
+  } catch {
+    const jsonMatch = outputText.match(/\{[\s\S]*\}/);
+
+    if (!jsonMatch) {
+      throw new Error('OpenAI response was not valid JSON.');
+    }
+
+    return JSON.parse(jsonMatch[0]) as Partial<OpenAiObservationResponse>;
+  }
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {

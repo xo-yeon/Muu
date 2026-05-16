@@ -206,21 +206,23 @@ AI 정책:
 
 디자인 키워드:
 
-- Mobile first
-- Pixel art
+- Tablet-centric, responsive downwards
+- Pixel drawing tool
+- Pink dotted desktop
+- Cream canvas panel
 - Cute but blunt
-- 2D RPG result screen
+- Emotion creature file
 - Hard shadow
-- Sharp border
-- Pastel monster world
+- Sharp brown pixel border
 
 레이아웃:
 
-- 360px 이상 모바일 기준
-- 앱 최대 폭 430px
-- 데스크톱에서는 모바일 프레임을 중앙 배치
-- 전체 배경은 픽셀 격자 패턴
-- 버튼과 카드에는 3px border, hard shadow 적용
+- 360px 이상 모바일 대응
+- 앱 최대 폭 960px
+- 768px 이상에서는 태블릿형 2컬럼 작업창
+- 1025px 이상에서는 태블릿 프레임을 중앙 배치
+- 전체 배경은 연한 핑크 도트 패턴
+- 버튼과 카드에는 2px 적갈색 border, hard shadow 적용
 
 ## 10. 저장 정책
 

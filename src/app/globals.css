@@ -8,23 +8,35 @@
 }
 
 :root {
-  --bg-mint: #ddf8e8;
-  --bg-cream: #fff6cf;
-  --bg-lavender: #eee3ff;
-  --bg-pink: #ffd9e8;
-  --bg-blue: #cdeeff;
-  --primary-purple: #5b3fd6;
-  --deep-purple: #2f1e8a;
-  --hot-pink: #ff6fae;
-  --pixel-cyan: #55dde0;
-  --pixel-yellow: #ffd95a;
-  --pixel-green: #72d66b;
-  --pixel-orange: #ff9f45;
-  --ink: #2b235a;
-  --muted: #7c72a8;
+  --bg-pixel-pink: #f8ddd8;
+  --bg-dot-pink: #e8bdb6;
+  --bg-cream: #fff9ef;
+  --bg-warm-cream: #f6ede1;
+  --bg-soft-rose: #f2b8af;
+  --bg-rose-strong: #d96f66;
+  --outline-brown: #8a3f35;
+  --deep-brown: #5a2a25;
+  --muted-brown: #9b6b61;
+  --teal-block: #78a8a4;
+  --teal-dark: #4f7778;
+  --sakura: #f5a3ba;
+  --blush: #ffd2d8;
+  --pixel-yellow: #f8d979;
   --white: #ffffff;
-  --font-pixel: 'DungGeunMo', 'Courier New', monospace;
-  --font-body: 'Pretendard', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  --ink: #4a2d2a;
+  --font-pixel: 'DungGeunMo', 'NeoDunggeunmo', 'Galmuri11', monospace;
+  --font-body: 'Pretendard', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+  --bg-mint: var(--bg-pixel-pink);
+  --bg-lavender: var(--bg-warm-cream);
+  --bg-pink: var(--blush);
+  --bg-blue: #d9ece8;
+  --primary-purple: var(--outline-brown);
+  --deep-purple: var(--deep-brown);
+  --hot-pink: var(--bg-rose-strong);
+  --pixel-cyan: var(--teal-block);
+  --pixel-green: #a8cbb5;
+  --pixel-orange: #e79b6f;
+  --muted: var(--muted-brown);
 }
 
 * {
@@ -40,7 +52,7 @@ body {
 
 body {
   color: var(--ink);
-  background-color: var(--bg-blue);
+  background-color: var(--bg-warm-cream);
   font-family: var(--font-body);
 }
 

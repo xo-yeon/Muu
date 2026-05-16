@@ -1,6 +1,11 @@
 import { describe, expect, it, vi } from 'vitest';
 import { analyzeHumanState } from './analysis';
-import { buildOpenAiRequestBody, extractResponseText, generateOpenAiObservation } from './openaiObservation';
+import {
+  buildOpenAiRequestBody,
+  extractResponseText,
+  generateOpenAiObservation,
+  parseObservationResponse
+} from './openaiObservation';
 import { questions } from '@/data/questions';
 import type { MuuSubmission } from '@/types/muu';
 
@@ -36,6 +41,12 @@ describe('openaiObservation', () => {
     ).toBe('{"observation":"오늘은 생각이 일을 대신하고 있습니다."}');
   });
 
+  it('parses observation JSON even when text is wrapped', () => {
+    expect(parseObservationResponse('```json\n{"observation":"오늘은 생각이 일을 대신하고 있습니다."}\n```')).toEqual({
+      observation: '오늘은 생각이 일을 대신하고 있습니다.'
+    });
+  });
+
   it('calls OpenAI and returns parsed observation', async () => {
     const result = analyzeHumanState(submission);
     const fetcher = vi.fn(async () => {
@@ -48,5 +59,19 @@ describe('openaiObservation', () => {
       '계획은 충분합니다. 오늘은 하나만 실제로 끝내세요.'
     );
     expect(fetcher).toHaveBeenCalledWith('https://api.openai.com/v1/responses', expect.any(Object));
+  });
+
+  it('uses a Responses-compatible default model', async () => {
+    const result = analyzeHumanState(submission);
+    const fetcher = vi.fn(async () => {
+      return new Response(JSON.stringify({ output_text: '{"observation":"메모를 보면 문제는 의지보다 실행 슬롯 부족입니다."}' }), {
+        status: 200
+      });
+    });
+
+    await generateOpenAiObservation({ submission, result }, { apiKey: 'test-key', fetcher });
+
+    const request = fetcher.mock.calls[0]?.[1] as RequestInit;
+    expect(JSON.parse(String(request.body))).toMatchObject({ model: 'gpt-4.1-mini' });
   });
 });
