@@ -1,0 +1,170 @@
+.inventoryLayout {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  gap: var(--panel-gap);
+  align-items: start;
+}
+
+.inventoryPanel,
+.sidePanel {
+  border: 3px solid var(--outline-brown);
+  border-radius: var(--radius-pixel);
+  box-shadow: var(--shadow-lg);
+}
+
+.inventoryPanel {
+  display: grid;
+  overflow: hidden;
+  background: var(--bg-rose);
+}
+
+.panelHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 42px;
+  padding: 8px 14px;
+  border-bottom: 3px solid var(--outline-brown);
+  background: var(--bg-rose);
+  color: var(--deep-brown);
+  font-family: var(--font-pixel);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.inventoryBody {
+  display: grid;
+  gap: 14px;
+  padding: 14px;
+  background-image:
+    linear-gradient(45deg, rgba(255, 255, 255, 0.55) 25%, transparent 25%),
+    linear-gradient(-45deg, rgba(255, 255, 255, 0.55) 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, rgba(255, 255, 255, 0.55) 75%),
+    linear-gradient(-45deg, transparent 75%, rgba(255, 255, 255, 0.55) 75%);
+  background-color: var(--bg-rose);
+  background-position: 0 0, 0 8px, 8px -8px, -8px 0;
+  background-size: 16px 16px;
+}
+
+.questionCard {
+  position: relative;
+  min-height: 170px;
+  padding: 20px;
+  border: 3px solid var(--outline-brown);
+  background: var(--bg-cream);
+  box-shadow: var(--shadow-md);
+}
+
+.kicker {
+  font-family: var(--font-pixel);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--muted-brown);
+}
+
+.questionCard h2 {
+  max-width: min(100%, 620px);
+  margin: 8px 0 0;
+  color: var(--deep-brown);
+  font-family: var(--font-pixel);
+  font-size: 24px;
+  line-height: 1.35;
+}
+
+.optionList {
+  display: grid;
+  gap: 10px;
+}
+
+.optionButton {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 54px;
+  padding: 12px 14px;
+  cursor: pointer;
+  color: var(--ink);
+  border: 2px solid var(--outline-brown);
+  border-radius: var(--radius-pixel);
+  background: var(--bg-cream);
+  box-shadow: var(--shadow-md);
+  font-family: var(--font-pixel);
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.35;
+  text-align: left;
+  transition:
+    transform 90ms steps(2, end),
+    box-shadow 90ms steps(2, end),
+    background 90ms steps(2, end);
+}
+
+.optionButton::before {
+  flex: 0 0 auto;
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--outline-brown);
+  background: var(--white);
+  box-shadow: 1px 1px 0 var(--deep-brown);
+  content: '';
+}
+
+.optionButton:hover {
+  background: var(--pixel-yellow);
+}
+
+.optionButton:hover::before {
+  background: var(--bg-rose-deep);
+}
+
+.optionButton:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 var(--deep-brown);
+}
+
+.sidePanel {
+  display: grid;
+  gap: 14px;
+  padding: 16px;
+  background: var(--bg-cream);
+}
+
+.sidePanel p {
+  margin: 8px 0 0;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.6;
+}
+
+.miniSlots {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(30px, 1fr));
+  gap: 4px;
+}
+
+.miniSlots span {
+  min-height: 16px;
+  border: 1px solid var(--slot-border);
+  background: var(--slot-bg);
+}
+
+.miniSlots .filledSlot {
+  border-color: var(--teal-dark);
+  background: var(--teal);
+}
+
+@media (max-width: 430px) {
+  .questionCard h2 {
+    font-size: 22px;
+  }
+}
+
+@media (min-width: 768px) {
+  .inventoryLayout {
+    grid-template-columns: minmax(0, 1fr) 320px;
+  }
+}

@@ -1,0 +1,153 @@
+.pixelCharacter {
+  position: relative;
+  border: 3px solid var(--outline-brown);
+  border-radius: 30% 42% 28% 38%;
+  background: var(--teal);
+  box-shadow:
+    0 0 0 4px var(--bg-cream),
+    5px 5px 0 var(--deep-brown);
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+.tiny {
+  width: 64px;
+  height: 64px;
+}
+
+.small {
+  width: 46px;
+  height: 46px;
+}
+
+.large {
+  width: 160px;
+  height: 160px;
+}
+
+.pixelCharacter::before,
+.pixelCharacter::after {
+  position: absolute;
+  bottom: -12px;
+  width: 18%;
+  height: 12px;
+  border: 2px solid var(--outline-brown);
+  background: inherit;
+  content: '';
+}
+
+.pixelCharacter::before {
+  left: 18%;
+}
+
+.pixelCharacter::after {
+  right: 18%;
+}
+
+.eyeLeft,
+.eyeRight,
+.mouth {
+  position: absolute;
+  background: var(--deep-brown);
+}
+
+.eyeLeft,
+.eyeRight {
+  top: 34%;
+  width: 12%;
+  height: 14%;
+}
+
+.eyeLeft {
+  left: 28%;
+}
+
+.eyeRight {
+  right: 28%;
+}
+
+.mouth {
+  left: 38%;
+  bottom: 26%;
+  width: 24%;
+  height: 8%;
+}
+
+.planner {
+  background: var(--pixel-yellow);
+}
+
+.burnout {
+  background: var(--bg-soft-blue);
+}
+
+.anxiety {
+  background: var(--bg-peach);
+}
+
+.survival {
+  background: var(--teal);
+}
+
+.scroll {
+  background: var(--bg-rose-deep);
+}
+
+.stable {
+  background: #9ddfd0;
+}
+
+.wave {
+  background: var(--bg-rose);
+}
+
+.overload {
+  background: var(--bg-lavender);
+}
+
+.blacksmith {
+  background: #b7a08a;
+}
+
+.slime {
+  background: #9bdc8b;
+}
+
+.wizard {
+  background: #c8b3e6;
+}
+
+.goblin {
+  background: #a8d779;
+}
+
+.newbie {
+  background: var(--pixel-yellow);
+}
+
+.tank {
+  background: #e88f7c;
+}
+
+.assassin {
+  background: #8d8aa8;
+}
+
+.alchemist {
+  background: #c8e889;
+}
+
+.summoner {
+  background: #caa3df;
+}
+
+.armor {
+  background: #f8f4dd;
+}
+
+@media (max-width: 430px) {
+  .large {
+    width: 128px;
+    height: 128px;
+  }
+}

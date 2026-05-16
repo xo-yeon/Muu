@@ -17,8 +17,25 @@ src/
     layout.tsx           # 루트 레이아웃, 메타데이터
     page.tsx             # MuuApp 진입점
   components/
-    MuuApp.tsx           # 전체 MVP 플로우 UI
-    MuuApp.module.css    # 모바일 픽셀 UI 스타일
+    MuuApp.tsx           # MVP 플로우 상태/전환 컨테이너
+    AppShell.tsx         # 앱 배경, 태블릿 프레임, 스크롤 컨테이너
+    AppShell.module.css
+    TopBar.tsx           # 이전 버튼, 진행률, 단계 카운터
+    TopBar.module.css
+    HomeScreen.tsx       # 홈/최근 결과 로드맵 화면
+    HomeScreen.module.css
+    QuestionScreen.tsx   # 질문 선택 인벤토리 화면
+    QuestionScreen.module.css
+    EmotionScreen.tsx    # 감정 태그 선택 인벤토리 화면
+    EmotionScreen.module.css
+    FreeTextScreen.tsx   # AI 보조 관찰용 선택 메모 화면
+    FreeTextScreen.module.css
+    ResultScreen.tsx     # 결과 도감/책 패널 화면
+    ResultScreen.module.css
+    PixelCharacter.tsx   # CSS 기반 픽셀 캐릭터
+    PixelCharacter.module.css
+    PixelAsset.tsx       # 픽셀 이미지 로딩/대체 표시
+    PixelAsset.module.css
   data/
     questions.ts         # 15개 질문과 감정 태그 데이터
   lib/
@@ -36,7 +53,7 @@ src/
 
 ### `MuuApp`
 
-클라이언트 컴포넌트이며 MVP 플로우 전체를 관리한다.
+클라이언트 컴포넌트이며 MVP 플로우의 상태와 전환만 관리한다. 화면별 UI는 `HomeScreen`, `QuestionScreen`, `EmotionScreen`, `FreeTextScreen`, `ResultScreen` 컴포넌트로 분리한다.
 
 - `home`: 시작 화면, 최근 결과 카드
 - `questions`: 15개 질문을 한 번에 하나씩 표시
@@ -45,6 +62,21 @@ src/
 - `result`: 결과 페이지
 
 질문 진행률은 현재 단계와 질문 인덱스 기반으로 계산한다.
+
+### UI 컴포넌트
+
+UI는 기능 단위로 분리한다.
+
+- `AppShell`: 전역 화면 프레임, 배경 장식, 중앙 콘텐츠 스크롤 영역
+- `TopBar`: 뒤로가기, 진행률, 현재 단계 카운터
+- `HomeScreen`: 시작 CTA와 최근 결과 복원
+- `QuestionScreen`: 질문 카드, 선택지 목록, 진행 슬롯
+- `EmotionScreen`: 감정 태그 선택과 다음 단계 CTA
+- `FreeTextScreen`: 선택 메모 입력, AI 보조 관찰 안내
+- `ResultScreen`: 결과 타입, 스탯, 상태 레이어, 반복 패턴, 유지/금지 행동, 캐릭터, 보상 아이템
+- `PixelCharacter`, `PixelAsset`: 여러 화면에서 쓰는 픽셀 UI 원자 컴포넌트
+
+각 컴포넌트의 스타일은 같은 이름의 `*.module.css`에 둔다. 새 화면/기능 컴포넌트를 추가할 때도 전역 CSS나 다른 컴포넌트 CSS에 스타일을 섞지 않는다.
 
 ### `questions.ts`
 
@@ -132,14 +164,16 @@ value: StoredMuuResult JSON
 
 ## UI 구조
 
-`DESIGN.md`의 Pixel Diary UI System을 기준으로 설계한다.
+`DESIGN.md`의 Muu Cozy Pixel Tablet UI System을 기준으로 설계한다.
 
 - 최소 너비: 360px
-- 최대 앱 프레임: 960px
+- 태블릿 기본 기준: 768px ~ 1024px
+- 최대 콘텐츠 폭: 960px, 데스크톱 가드 최대 1024px
 - 768px 이상에서는 질문/결과 화면을 태블릿형 2컬럼 작업창으로 표시
 - 1025px 이상에서는 태블릿 프레임을 중앙 정렬하고 hard shadow를 적용
 - 연한 핑크 도트 배경, 크림 패널, 적갈색 픽셀 라인 사용
-- 결과 페이지는 감정 캐릭터 캔버스와 레이어 상태 패널 느낌으로 구성
+- 결과 페이지는 책/도감 패널로 구성하고, 좌측에는 결과 제목/스탯/상태 레이어/반복 패턴/행동 가이드를 묶고 우측에는 캐릭터/팩트 한 줄/획득 아이템/AI 관찰을 묶는다.
+- 타이틀/라벨/버튼은 `DungGeunMo.woff` 기반 픽셀 폰트를 사용하고, 긴 본문은 일반 고딕 계열 본문 폰트를 사용한다.
 
 ## 테스트 전략
 

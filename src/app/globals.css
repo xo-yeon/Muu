@@ -1,41 +1,59 @@
 @font-face {
   font-family: 'DungGeunMo';
-  src: url('/assets/fonts/DungGeunMo.woff2') format('woff2'),
-       url('/assets/fonts/DungGeunMo.woff') format('woff');
+  src: url('/assets/fonts/DungGeunMo.woff') format('woff');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
 }
 
 :root {
+  --screen-padding: 24px;
+  --content-max: 960px;
+  --desktop-guard-max: 1024px;
+  --panel-gap: 18px;
+  --sky-blue: #69b6dd;
+  --grass-green: #36a88f;
   --bg-pixel-pink: #f8ddd8;
   --bg-dot-pink: #e8bdb6;
-  --bg-cream: #fff9ef;
-  --bg-warm-cream: #f6ede1;
-  --bg-soft-rose: #f2b8af;
-  --bg-rose-strong: #d96f66;
+  --bg-cream: #fff7f0;
+  --bg-rose: #f6b8c9;
+  --bg-rose-deep: #d96f86;
+  --bg-lavender: #e9c5f3;
+  --bg-soft-blue: #c8ddf6;
+  --bg-peach: #ffd2b8;
   --outline-brown: #8a3f35;
-  --deep-brown: #5a2a25;
+  --deep-brown: #4a2522;
   --muted-brown: #9b6b61;
-  --teal-block: #78a8a4;
-  --teal-dark: #4f7778;
-  --sakura: #f5a3ba;
-  --blush: #ffd2d8;
+  --teal: #4fae9a;
+  --teal-dark: #2f6f68;
   --pixel-yellow: #f8d979;
   --white: #ffffff;
-  --ink: #4a2d2a;
+  --slot-bg: #e9dde7;
+  --slot-border: #b99aaa;
+  --ink: #3e2525;
+  --radius-pixel: 3px;
+  --radius-md: 8px;
+  --radius-book: 12px;
+  --shadow-sm: 2px 2px 0 var(--deep-brown);
+  --shadow-md: 3px 3px 0 var(--deep-brown);
+  --shadow-lg: 4px 4px 0 var(--deep-brown);
+  --shadow-book: 5px 5px 0 var(--deep-brown);
   --font-pixel: 'DungGeunMo', 'NeoDunggeunmo', 'Galmuri11', monospace;
   --font-body: 'Pretendard', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+  --bg-warm-cream: var(--bg-cream);
+  --bg-soft-rose: var(--bg-rose);
+  --bg-rose-strong: var(--bg-rose-deep);
+  --teal-block: var(--teal);
+  --blush: var(--bg-peach);
   --bg-mint: var(--bg-pixel-pink);
-  --bg-lavender: var(--bg-warm-cream);
-  --bg-pink: var(--blush);
-  --bg-blue: #d9ece8;
+  --bg-pink: var(--bg-rose);
+  --bg-blue: var(--bg-soft-blue);
   --primary-purple: var(--outline-brown);
   --deep-purple: var(--deep-brown);
-  --hot-pink: var(--bg-rose-strong);
-  --pixel-cyan: var(--teal-block);
+  --hot-pink: var(--bg-rose-deep);
+  --pixel-cyan: var(--teal);
   --pixel-green: #a8cbb5;
-  --pixel-orange: #e79b6f;
+  --pixel-orange: var(--bg-peach);
   --muted: var(--muted-brown);
 }
 
@@ -46,17 +64,29 @@
 html,
 body {
   min-width: 360px;
-  min-height: 100%;
+  min-height: 100dvh;
   margin: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-color: #F8DDD8;
+  background-image: radial-gradient(#E8BDB6 1px, transparent 1px);
+  background-size: 12px 12px;
 }
 
 body {
   color: var(--ink);
-  background-color: var(--bg-warm-cream);
   font-family: var(--font-body);
 }
 
 button,
 textarea {
   font: inherit;
+}
+
+@media (max-width: 767px) {
+  :root {
+    --screen-padding: 14px;
+    --content-max: 430px;
+  }
 }

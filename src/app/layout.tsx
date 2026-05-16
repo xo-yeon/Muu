@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://muu-app.vercel.app'),
   title: 'Muu | 오늘의 인간 상태 분석',
   description: '귀여운 픽셀 감성으로 확인하는 오늘의 내 상태. 15개 질문을 통해 당신의 인간 유형과 행동 패턴을 분석해 드립니다.',
   keywords: ['Muu', '감정 체크', '인간 유형', '픽셀 아트', '자기 관찰', '심리 테스트', 'MBTI', '상태 리포트', '감정 기록'],
@@ -29,7 +30,10 @@ export const metadata: Metadata = {
     images: ['/og-image.png'],
   },
   icons: {
-    icon: '/favicon.ico',
+    icon: [
+      { url: '/favicon.ico' },
+      { url: '/icon.png', type: 'image/png' },
+    ],
     apple: '/apple-touch-icon.png',
   },
 };
@@ -37,7 +41,7 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
-  themeColor: '#DDF8E8'
+  themeColor: '#F8DDD8'
 };
 
 export default function RootLayout({

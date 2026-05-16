@@ -70,7 +70,7 @@ export function buildOpenAiRequestBody(input: OpenAiObservationInput, model: str
           '인간 유형은 이미 룰 기반 분석으로 확정되었으므로 절대 바꾸지 않는다.',
           '의학적 진단, 치료 조언, 과한 위로, 사용자 비난은 금지한다.',
           '한국어로 1~2문장만 쓴다.',
-          '귀여운 UI와 대비되게 현실적이고 약간 직설적인 톤을 유지한다.',
+          '귀여운 UI와 대비되게 현실적이고 직설적인 톤을 유지한다.',
           '반드시 JSON 객체만 반환한다. 형식: {"observation":"..."}'
         ].join('\n')
       },
