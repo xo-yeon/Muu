@@ -1,8 +1,29 @@
-import type { HumanResult, RewardItem } from '@/types/muu';
+import type { CSSProperties } from 'react';
+import type { HumanResult, HumanTypeId, RewardItem } from '@/types/muu';
 import { PixelAsset } from './PixelAsset';
 import pixelAssetStyles from './PixelAsset.module.css';
-import { PixelCharacter } from './PixelCharacter';
 import styles from './ResultScreen.module.css';
+
+const characterAssetPaths: Record<HumanTypeId, string> = {
+  overheatedPlanner: '/assets/characters/overheatedPlanner.png',
+  quietBurnout: '/assets/characters/quietBurnout.png',
+  futureBuffering: '/assets/characters/futureBuffering.png',
+  survivalMode: '/assets/characters/survivalMode.png',
+  dopamineScroller: '/assets/characters/dopamineScroller.png',
+  unexpectedlyOkay: '/assets/characters/unexpectedlyOkay.png',
+  emotionalWave: '/assets/characters/emotionalWave.png',
+  softSystemOverload: '/assets/characters/softSystemOverload.png',
+  excuseBlacksmith: '/assets/characters/excuseBlacksmith.png',
+  procrastinationSlime: '/assets/characters/procrastinationSlime.png',
+  anxietyWizard: '/assets/characters/anxietyWizard.png',
+  dopamineGoblin: '/assets/characters/dopamineGoblin.png',
+  planningMaxNewbie: '/assets/characters/planningMaxNewbie.png',
+  emotionTank: '/assets/characters/emotionTank.png',
+  realityEscapeAssassin: '/assets/characters/realityEscapeAssassin.png',
+  rationalizationAlchemist: '/assets/characters/rationalizationAlchemist.png',
+  blameSummoner: '/assets/characters/blameSummoner.png',
+  paperArmorMental: '/assets/characters/paperArmorMental.png'
+};
 
 type ResultScreenProps = {
   result: HumanResult;
@@ -12,6 +33,10 @@ type ResultScreenProps = {
 
 export function ResultScreen({ result, analysisError, onRestart }: ResultScreenProps) {
   const rewardItem = getRewardItem(result);
+  const characterAssetPath = characterAssetPaths[result.id];
+  const resultHeroStyle = {
+    '--character-image': `url(${characterAssetPath})`
+  } as CSSProperties;
   const forbiddenAction = result.forbiddenAction ?? '오늘은 새 핑계 만들기 금지. 이미 재료가 충분합니다.';
   const pattern = result.comparison ?? {
     label: '반복 패턴',
@@ -65,8 +90,7 @@ export function ResultScreen({ result, analysisError, onRestart }: ResultScreenP
 
         <div className={styles.bookPage}>
           <div className={styles.bookTitle}>CREATURE LOG</div>
-          <div className={styles.resultHero}>
-            <PixelCharacter body={result.character.body} mood={result.character.mood} size="large" />
+          <div className={styles.resultHero} style={resultHeroStyle}>
             <strong>{result.character.name}</strong>
             <small>{result.character.mood}</small>
           </div>

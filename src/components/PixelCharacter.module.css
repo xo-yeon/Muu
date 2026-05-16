@@ -11,18 +11,18 @@
 }
 
 .tiny {
-  width: 64px;
-  height: 64px;
+  width: 32px;
+  height: 36px;
 }
 
 .small {
-  width: 46px;
-  height: 46px;
+  width: 64px;
+  height: 72px;
 }
 
 .large {
-  width: 160px;
-  height: 160px;
+  width: 140px;
+  height: 156px;
 }
 
 .pixelCharacter::before,
