@@ -17,7 +17,7 @@ export function HomeScreen({ historyCount, lastResult, onStart, onRestore }: Hom
         <PixelAsset
           alt="홈 도트 캐릭터"
           fallback={<PixelCharacter body="stable" mood="홈 캐릭터" size="small" />}
-          src="/assets/characters/home.gif"
+          src="/assets/characters/main.png"
           variant="home"
         />
         <span className={styles.logoText}>Muu</span>
@@ -30,7 +30,7 @@ export function HomeScreen({ historyCount, lastResult, onStart, onRestore }: Hom
           <p>귀여운 도트 너머, 현실적인 오늘의 기록을 담습니다.</p>
           <div className={styles.roadmapSection}>
             <span>Quest 01</span>
-            <strong>15개 질문으로 상태 파일 만들기</strong>
+            <strong>12개 질문으로 상태 파일 만들기</strong>
           </div>
           <div className={styles.roadmapSection}>
             <span>Quest 02</span>

@@ -5,11 +5,8 @@
 }
 
 .home {
-  width: 46px;
-  height: 46px;
-  border: 2px solid var(--outline-brown);
-  background: var(--bg-cream);
-  box-shadow: var(--shadow-md);
+  width: 80px;
+  height: 80px;
 }
 
 .item,

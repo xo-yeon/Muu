@@ -1,6 +1,6 @@
 import type { Question } from '@/types/muu';
 
-export const questionSessionSize = 10;
+export const questionSessionSize = 12;
 
 export function selectRandomQuestions(
   source: Question[],

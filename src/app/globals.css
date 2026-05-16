@@ -39,7 +39,7 @@
   --shadow-lg: 4px 4px 0 var(--deep-brown);
   --shadow-book: 5px 5px 0 var(--deep-brown);
   --font-pixel: 'DungGeunMo', 'NeoDunggeunmo', 'Galmuri11', monospace;
-  --font-body: 'Pretendard', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+  --font-body: var(--font-pixel);
   --bg-warm-cream: var(--bg-cream);
   --bg-soft-rose: var(--bg-rose);
   --bg-rose-strong: var(--bg-rose-deep);

@@ -37,7 +37,7 @@ src/
     PixelAsset.tsx       # 픽셀 이미지 로딩/대체 표시
     PixelAsset.module.css
   data/
-    questions.ts         # 15개 질문과 감정 태그 데이터
+    questions.ts         # 12개 질문과 감정 태그 데이터
   lib/
     analysis.ts          # 룰 기반 분석
     openaiObservation.ts # OpenAI 보조 관찰 요청 생성/응답 파싱
@@ -56,7 +56,7 @@ src/
 클라이언트 컴포넌트이며 MVP 플로우의 상태와 전환만 관리한다. 화면별 UI는 `HomeScreen`, `QuestionScreen`, `EmotionScreen`, `FreeTextScreen`, `ResultScreen` 컴포넌트로 분리한다.
 
 - `home`: 시작 화면, 최근 결과 카드
-- `questions`: 15개 질문을 한 번에 하나씩 표시
+- `questions`: 12개 질문을 한 번에 하나씩 표시
 - `emotions`: 감정 태그 다중 선택
 - `freeText`: 선택형 자유 입력
 - `result`: 결과 페이지
@@ -116,7 +116,7 @@ type Axis =
 Home
   -> 사용자가 시작
 Questions
-  -> 15개 선택 답변 저장
+  -> 12개 선택 답변 저장
 Emotion Tags
   -> 감정 태그 ID 배열 저장
 Free Text

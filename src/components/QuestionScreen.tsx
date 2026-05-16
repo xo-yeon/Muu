@@ -37,7 +37,7 @@ export function QuestionScreen({ question, questionIndex, totalQuestions, onSele
         <PixelCharacter body={questionIndex % 2 === 0 ? 'overload' : 'wave'} mood="질문 안내" size="tiny" />
         <p>랜덤 질문 {totalQuestions}개만 진행합니다. 지금은 감정 아이템을 하나씩 고르는 단계입니다.</p>
         <div className={styles.miniSlots} aria-hidden="true">
-          {Array.from({ length: 10 }).map((_, index) => (
+          {Array.from({ length: questionSessionSize }).map((_, index) => (
             <span key={index} className={index <= questionIndex ? styles.filledSlot : undefined} />
           ))}
         </div>

@@ -3,7 +3,6 @@
   z-index: 2;
   display: grid;
   align-content: center;
-  gap: 18px;
   padding: 10px 0;
 }
 
@@ -21,6 +20,7 @@
   font-weight: 900;
   line-height: 1;
   text-shadow: 3px 3px 0 var(--pixel-yellow);
+  margin-left: -8px;
 }
 
 .logoBadge,
