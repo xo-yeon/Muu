@@ -21,7 +21,7 @@
   padding: 20px;
 }
 
-.bookPage + .bookPage {
+.bookPage+.bookPage {
   border-top: 3px solid var(--outline-brown);
 }
 
@@ -87,7 +87,7 @@
   gap: 10px;
 }
 
-.statRow > span {
+.statRow>span {
   font-family: var(--font-pixel);
   font-size: 12px;
 }
@@ -130,7 +130,7 @@
   border-bottom: 0;
 }
 
-.layerRow > span {
+.layerRow>span {
   width: 22px;
   height: 22px;
   border: 2px solid var(--outline-brown);
@@ -144,31 +144,45 @@
   line-height: 1.45;
 }
 
-.resultHero {
-  display: grid;
-  justify-items: center;
-  align-content: end;
-  gap: 6px;
-  min-height: 360px;
-  padding: 18px;
+.heroCard {
+  overflow: hidden;
   border: 3px solid var(--outline-brown);
-  border-radius: 10px;
-  background-color: var(--bg-lavender);
+  border-radius: 12px;
+  background: var(--white);
+  box-shadow: var(--shadow-md);
+}
+
+.resultHero {
+  width: 100%;
+  min-height: 240px;
   background-image: var(--character-image);
   background-repeat: no-repeat;
-  background-position: center 18px;
-  background-size: min(82%, 280px) auto;
-  text-align: center;
+  background-position: center;
+  background-size: cover;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
 }
 
-.resultHero strong {
+.heroLabel {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 14px 16px;
+  border-top: 3px solid var(--outline-brown);
+  background: var(--white);
+  text-align: left;
+}
+
+.heroLabel strong {
   color: var(--deep-brown);
   font-family: var(--font-pixel);
-  font-size: 18px;
+  font-size: 20px;
+  line-height: 1.2;
 }
 
-.resultHero small {
+.heroLabel small {
   color: var(--muted-brown);
+  font-size: 14px;
   font-weight: 700;
 }
 
@@ -292,8 +306,7 @@
 
 @media (max-width: 430px) {
   .resultHero {
-    min-height: 320px;
-    background-size: min(88%, 240px) auto;
+    min-height: 180px;
   }
 
   .statRow {
@@ -306,7 +319,7 @@
     grid-template-columns: 1fr 1fr;
   }
 
-  .bookPage + .bookPage {
+  .bookPage+.bookPage {
     border-top: 0;
     border-left: 3px solid var(--outline-brown);
   }

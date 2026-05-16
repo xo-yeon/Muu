@@ -90,9 +90,12 @@ export function ResultScreen({ result, analysisError, onRestart }: ResultScreenP
 
         <div className={styles.bookPage}>
           <div className={styles.bookTitle}>CREATURE LOG</div>
-          <div className={styles.resultHero} style={resultHeroStyle}>
-            <strong>{result.character.name}</strong>
-            <small>{result.character.mood}</small>
+          <div className={styles.heroCard}>
+            <div className={styles.resultHero} style={resultHeroStyle} />
+            <div className={styles.heroLabel}>
+              <strong>{result.character.name}</strong>
+              <small>{result.character.mood}</small>
+            </div>
           </div>
           <section className={styles.factBubble}>
             <span>팩트 한 줄</span>
