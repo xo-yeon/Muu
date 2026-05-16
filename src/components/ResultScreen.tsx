@@ -4,6 +4,24 @@ import { PixelAsset } from './PixelAsset';
 import pixelAssetStyles from './PixelAsset.module.css';
 import styles from './ResultScreen.module.css';
 
+const uiText = {
+  weather: '\uac10\uc815 \ub0a0\uc528',
+  factLine: '\ud329\ud2b8 \ud55c \uc904',
+  action: '\uc624\ub298\uc758 \uc778\uac04 \uc720\uc9c0 \ud589\ub3d9',
+  forbiddenAction: '\uc624\ub298\uc758 \uae08\uc9c0 \ud589\ub3d9',
+  rewardItem: '\ud68d\ub4dd \uc544\uc774\ud15c',
+  aiObservation: 'AI \uad00\ucc30',
+  restart: '\ub2e4\uc2dc \ud558\uae30',
+  patternLabel: '\ubc18\ubcf5 \ud328\ud134',
+  patternSummary:
+    '\uc774\uc804 \uacb0\uacfc\uac00 \uc544\uc9c1 \uc5c6\uc5b4\uc11c \ube44\uad50\ub294 \ub300\uae30 \uc911\uc785\ub2c8\ub2e4. \uc624\ub298 \ub85c\uadf8\ubd80\ud130 \uae30\uc900\uc810\uc73c\ub85c \uc800\uc7a5\ub429\ub2c8\ub2e4.',
+  fallbackForbidden:
+    '\uc624\ub298\uc740 \uc0c8 \ud551\uacc4 \ub9cc\ub4e4\uae30 \uae08\uc9c0. \uc774\ubbf8 \uc7ac\ub8cc\uac00 \ucda9\ubd84\ud569\ub2c8\ub2e4.',
+  fallbackItemName: '\uc784\uc2dc \uc778\uac04 \uc720\uc9c0 \ud0a4\ud2b8',
+  fallbackItemDescription:
+    '\uc624\ub798\ub41c \uacb0\uacfc\uc5d0\ub3c4 \uc9c0\uae09\ub418\ub294 \uae30\ubcf8 \uc544\uc774\ud15c\uc785\ub2c8\ub2e4. \uc77c\ub2e8 \ubb3c\ubd80\ud130 \ub9c8\uc2dc\uba74 \ub429\ub2c8\ub2e4.'
+};
+
 const characterAssetPaths: Record<HumanTypeId, string> = {
   overheatedPlanner: '/assets/characters/overheatedPlanner.png',
   quietBurnout: '/assets/characters/quietBurnout.png',
@@ -37,10 +55,10 @@ export function ResultScreen({ result, analysisError, onRestart }: ResultScreenP
   const resultHeroStyle = {
     '--character-image': `url(${characterAssetPath})`
   } as CSSProperties;
-  const forbiddenAction = result.forbiddenAction ?? '오늘은 새 핑계 만들기 금지. 이미 재료가 충분합니다.';
+  const forbiddenAction = result.forbiddenAction ?? uiText.fallbackForbidden;
   const pattern = result.comparison ?? {
-    label: '반복 패턴',
-    summary: '이전 결과가 아직 없어서 비교는 대기 중입니다. 오늘 로그부터 기준점으로 저장됩니다.'
+    label: uiText.patternLabel,
+    summary: uiText.patternSummary
   };
   const stats = getDisplayStats(result);
 
@@ -48,12 +66,33 @@ export function ResultScreen({ result, analysisError, onRestart }: ResultScreenP
     <section className={styles.resultStack}>
       <article className={styles.bookPanel}>
         <div className={styles.bookPage}>
-          <div className={styles.bookTitle}>TODAY FILE</div>
+          <div className={styles.bookTitle}>CREATURE LOG</div>
+          <div className={styles.heroCard}>
+            <div className={styles.resultHero} style={resultHeroStyle} />
+          </div>
           <header className={styles.titleGroup}>
-            <span className={styles.kicker}>RESULT</span>
             <h1>{result.typeName}</h1>
-            <p className={styles.weather}>감정 날씨: {result.emotionWeather}</p>
+            <small>{result.character.mood}</small>
+            <p className={styles.weather}>
+              {uiText.weather}: {result.emotionWeather}
+            </p>
           </header>
+          <section className={styles.factBubble}>
+            <span>{uiText.factLine}</span>
+            <p>{result.factLine}</p>
+          </section>
+          <section className={styles.actionPanel}>
+            <span>{uiText.action}</span>
+            <p>{result.action}</p>
+          </section>
+          <section className={styles.forbiddenPanel}>
+            <span>{uiText.forbiddenAction}</span>
+            <p>{forbiddenAction}</p>
+          </section>
+        </div>
+
+        <div className={styles.bookPage}>
+          <div className={styles.bookTitle}>TODAY FILE</div>
           <div className={styles.statBlock}>
             {stats.map((stat) => (
               <div className={styles.statRow} key={stat.label}>
@@ -78,29 +117,6 @@ export function ResultScreen({ result, analysisError, onRestart }: ResultScreenP
             <span>{pattern.label}</span>
             <p>{pattern.summary}</p>
           </section>
-          <section className={styles.actionPanel}>
-            <span>오늘의 인간 유지 행동</span>
-            <p>{result.action}</p>
-          </section>
-          <section className={styles.forbiddenPanel}>
-            <span>오늘의 금지 행동</span>
-            <p>{forbiddenAction}</p>
-          </section>
-        </div>
-
-        <div className={styles.bookPage}>
-          <div className={styles.bookTitle}>CREATURE LOG</div>
-          <div className={styles.heroCard}>
-            <div className={styles.resultHero} style={resultHeroStyle} />
-            <div className={styles.heroLabel}>
-              <strong>{result.character.name}</strong>
-              <small>{result.character.mood}</small>
-            </div>
-          </div>
-          <section className={styles.factBubble}>
-            <span>팩트 한 줄</span>
-            <p>{result.factLine}</p>
-          </section>
           <section className={styles.itemPanel}>
             <PixelAsset
               alt={rewardItem.name}
@@ -109,20 +125,20 @@ export function ResultScreen({ result, analysisError, onRestart }: ResultScreenP
               variant="item"
             />
             <div>
-              <span>획득 아이템</span>
+              <span>{uiText.rewardItem}</span>
               <strong>{rewardItem.name}</strong>
               <p>{rewardItem.description}</p>
             </div>
           </section>
           {result.aiObservation && (
             <section className={styles.aiPanel}>
-              <h2>AI 관찰</h2>
+              <h2>{uiText.aiObservation}</h2>
               <p>{result.aiObservation}</p>
             </section>
           )}
           {analysisError && <p className={styles.inlineError}>{analysisError}</p>}
           <button className={styles.primaryButton} type="button" onClick={onRestart}>
-            다시 하기
+            {uiText.restart}
           </button>
         </div>
       </article>
@@ -133,19 +149,19 @@ export function ResultScreen({ result, analysisError, onRestart }: ResultScreenP
 function getRewardItem(result: HumanResult): RewardItem {
   return (
     result.rewardItem ?? {
-      name: '임시 인간 유지 키트',
-      description: '오래된 결과에도 지급되는 기본 아이템입니다. 일단 물부터 마시면 됩니다.'
+      name: uiText.fallbackItemName,
+      description: uiText.fallbackItemDescription
     }
   );
 }
 
 function getDisplayStats(result: HumanResult) {
   return [
-    { label: '에너지', value: clampStat(10 - result.scores.burnout) },
-    { label: '사회성 배터리', value: clampStat(10 - result.scores.socialFatigue) },
-    { label: '회복력', value: clampStat(result.scores.stability) },
-    { label: '현실 회피력', value: clampStat(result.scores.avoidance) },
-    { label: '자기돌봄 필요도', value: clampStat(Math.max(result.scores.burnout, result.scores.anxiety)) }
+    { label: '\uc5d0\ub108\uc9c0', value: clampStat(10 - result.scores.burnout) },
+    { label: '\uc0ac\ud68c\uc131 \ubc30\ud130\ub9ac', value: clampStat(10 - result.scores.socialFatigue) },
+    { label: '\ud68c\ubcf5\ub825', value: clampStat(result.scores.stability) },
+    { label: '\ud604\uc2e4 \ud68c\ud53c\ub825', value: clampStat(result.scores.avoidance) },
+    { label: '\uc790\uae30\ub3cc\ubd04 \ud544\uc694\ub3c4', value: clampStat(Math.max(result.scores.burnout, result.scores.anxiety)) }
   ];
 }
 
