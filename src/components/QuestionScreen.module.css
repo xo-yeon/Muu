@@ -140,6 +140,13 @@
   line-height: 1.6;
 }
 
+.characterImage {
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  object-fit: contain;
+  margin: 0 auto;
+}
+
 .miniSlots {
   display: grid;
   grid-template-columns: repeat(5, minmax(30px, 1fr));

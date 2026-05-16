@@ -1,6 +1,6 @@
 import { questionSessionSize } from '@/lib/questionSelection';
 import type { Question } from '@/types/muu';
-import { PixelCharacter } from './PixelCharacter';
+import Image from 'next/image';
 import styles from './QuestionScreen.module.css';
 
 type QuestionScreenProps = {
@@ -34,7 +34,14 @@ export function QuestionScreen({ question, questionIndex, totalQuestions, onSele
       </article>
       <aside className={styles.sidePanel}>
         <span className={styles.kicker}>STATUS</span>
-        <PixelCharacter body={questionIndex % 2 === 0 ? 'overload' : 'wave'} mood="질문 안내" size="tiny" />
+        <Image
+          unoptimized
+          src="/assets/characters/main.png"
+          alt="Muu"
+          width={64}
+          height={64}
+          className={styles.characterImage}
+        />
         <p>랜덤 질문 {totalQuestions}개만 진행합니다. 지금은 감정 아이템을 하나씩 고르는 단계입니다.</p>
         <div className={styles.miniSlots} aria-hidden="true">
           {Array.from({ length: questionSessionSize }).map((_, index) => (
