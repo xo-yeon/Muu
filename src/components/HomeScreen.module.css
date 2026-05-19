@@ -120,7 +120,8 @@
   font-size: 11px;
 }
 
-.primaryButton {
+.primaryButton,
+.secondaryLink {
   width: 100%;
   min-height: 56px;
   padding: 12px 16px;
@@ -133,13 +134,21 @@
   font-family: var(--font-pixel);
   font-size: 16px;
   font-weight: 700;
+  text-decoration: none;
   transition:
     transform 90ms steps(2, end),
     box-shadow 90ms steps(2, end),
     background 90ms steps(2, end);
 }
 
-.primaryButton:active {
+.secondaryLink {
+  display: grid;
+  place-items: center;
+  background: var(--white);
+}
+
+.primaryButton:active,
+.secondaryLink:active {
   transform: translate(2px, 2px);
   box-shadow: 1px 1px 0 var(--deep-brown);
 }

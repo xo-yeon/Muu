@@ -279,10 +279,10 @@
   line-height: 1.35;
 }
 
-.primaryButton {
+.primaryButton,
+.secondaryButton {
   width: 100%;
   min-height: 56px;
-  margin-top: auto;
   padding: 12px 16px;
   cursor: pointer;
   color: var(--deep-brown);
@@ -299,7 +299,16 @@
     background 90ms steps(2, end);
 }
 
-.primaryButton:active {
+.primaryButton {
+  margin-top: auto;
+}
+
+.secondaryButton {
+  background: var(--white);
+}
+
+.primaryButton:active,
+.secondaryButton:active {
   transform: translate(2px, 2px);
   box-shadow: 1px 1px 0 var(--deep-brown);
 }

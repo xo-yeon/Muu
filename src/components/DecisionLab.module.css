@@ -1,0 +1,355 @@
+.header {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: 40px 1fr;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+  padding: 10px 12px;
+  border: 3px solid var(--outline-brown);
+  border-radius: var(--radius-pixel);
+  background: rgba(255, 247, 240, 0.92);
+  box-shadow: var(--shadow-md);
+}
+
+.header h1,
+.labPanel h2,
+.recommendPanel h2,
+.scorePanel h2,
+.memoPanel h2 {
+  margin: 4px 0 0;
+  color: var(--deep-brown);
+  font-family: var(--font-pixel);
+  letter-spacing: 0;
+}
+
+.header h1 {
+  font-size: 26px;
+  line-height: 1.1;
+}
+
+.backLink,
+.iconButton,
+.smallButton,
+.primaryButton,
+.secondaryButton {
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  color: var(--deep-brown);
+  border: 3px solid var(--outline-brown);
+  border-radius: var(--radius-pixel);
+  background: var(--bg-cream);
+  box-shadow: var(--shadow-md);
+  font-family: var(--font-pixel);
+  font-weight: 900;
+  text-decoration: none;
+  transition:
+    transform 90ms steps(2, end),
+    box-shadow 90ms steps(2, end),
+    background 90ms steps(2, end);
+}
+
+.backLink {
+  width: 34px;
+  height: 34px;
+}
+
+.kicker,
+.statusChip,
+.fieldLabel,
+.count,
+.factPanel span,
+.avoidPanel span,
+.scoreRow small {
+  color: var(--muted-brown);
+  font-family: var(--font-pixel);
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.statusChip {
+  grid-column: 1 / -1;
+  justify-self: start;
+  padding: 6px 8px;
+  border: 2px solid var(--outline-brown);
+  border-radius: var(--radius-pixel);
+  background: var(--pixel-yellow);
+  color: var(--deep-brown);
+  box-shadow: var(--shadow-sm);
+}
+
+.workspace,
+.resultGrid {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  gap: var(--panel-gap);
+}
+
+.labPanel,
+.formPanel,
+.recommendPanel,
+.scorePanel,
+.memoPanel {
+  border: 3px solid var(--outline-brown);
+  border-radius: var(--radius-book);
+  background: var(--bg-cream);
+  box-shadow: var(--shadow-book);
+}
+
+.labPanel,
+.recommendPanel {
+  display: grid;
+  gap: 12px;
+  padding: 20px;
+  overflow: hidden;
+  background: var(--bg-rose);
+}
+
+.labImage {
+  min-height: 220px;
+  border: 3px solid var(--outline-brown);
+  border-radius: 12px;
+  background-color: var(--white);
+  background-image: url('/assets/characters/main.png');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  box-shadow: var(--shadow-md);
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+.formPanel,
+.scorePanel,
+.memoPanel {
+  display: grid;
+  gap: 12px;
+  padding: 18px;
+}
+
+.labPanel h2,
+.recommendPanel h2 {
+  font-size: 26px;
+  line-height: 1.2;
+}
+
+.labPanel p,
+.recommendPanel p,
+.memoPanel p,
+.avoidPanel p {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.6;
+}
+
+.topicInput,
+.optionRow input {
+  width: 100%;
+  color: var(--ink);
+  border: 3px solid var(--outline-brown);
+  border-radius: var(--radius-pixel);
+  outline: none;
+  background: var(--white);
+  box-shadow: var(--shadow-md);
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.topicInput {
+  min-height: 112px;
+  resize: vertical;
+  padding: 12px;
+  line-height: 1.5;
+}
+
+.count {
+  justify-self: end;
+}
+
+.optionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.smallButton {
+  min-height: 36px;
+  padding: 6px 10px;
+  background: var(--bg-lavender);
+}
+
+.optionList {
+  display: grid;
+  gap: 10px;
+}
+
+.optionRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 42px;
+  gap: 8px;
+}
+
+.optionRow input {
+  min-height: 48px;
+  padding: 10px;
+}
+
+.iconButton {
+  width: 38px;
+  min-height: 38px;
+}
+
+.primaryButton,
+.secondaryButton {
+  width: 100%;
+  min-height: 56px;
+  padding: 12px 14px;
+  font-size: 16px;
+}
+
+.primaryButton {
+  background: var(--bg-rose-deep);
+}
+
+.secondaryButton {
+  background: var(--white);
+}
+
+.primaryButton:active,
+.secondaryButton:active,
+.smallButton:active,
+.iconButton:active,
+.backLink:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 var(--deep-brown);
+}
+
+.primaryButton:disabled,
+.smallButton:disabled,
+.iconButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.factPanel,
+.avoidPanel,
+.doneMessage {
+  border: 3px solid var(--outline-brown);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+}
+
+.factPanel {
+  padding: 16px;
+  background: var(--bg-peach);
+}
+
+.factPanel p {
+  margin: 8px 0 0;
+  color: var(--deep-brown);
+  font-family: var(--font-pixel);
+  font-size: 18px;
+  font-weight: 900;
+  line-height: 1.45;
+}
+
+.scorePanel h2,
+.memoPanel h2 {
+  font-size: 16px;
+}
+
+.scoreRow {
+  display: grid;
+  gap: 8px;
+  padding: 10px;
+  border: 2px solid var(--outline-brown);
+  border-radius: var(--radius-md);
+  background: var(--white);
+}
+
+.scoreRow div:first-child {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  font-weight: 900;
+}
+
+.scoreRow strong {
+  color: var(--deep-brown);
+}
+
+.scoreTrack {
+  height: 16px;
+  padding: 2px;
+  border: 2px solid var(--outline-brown);
+  background: var(--slot-bg);
+}
+
+.scoreTrack span {
+  display: block;
+  height: 100%;
+  background: repeating-linear-gradient(90deg, var(--teal) 0 8px, var(--pixel-yellow) 8px 16px);
+}
+
+.avoidPanel {
+  display: grid;
+  gap: 6px;
+  padding: 16px;
+  background: var(--pixel-yellow);
+}
+
+.avoidPanel strong {
+  color: var(--deep-brown);
+  font-family: var(--font-pixel);
+  font-size: 17px;
+}
+
+.doneMessage {
+  margin: 0;
+  padding: 12px;
+  background: var(--bg-soft-blue);
+  font-size: 14px;
+  font-weight: 900;
+  line-height: 1.5;
+}
+
+.actionRow {
+  display: grid;
+  gap: 10px;
+}
+
+@media (min-width: 768px) {
+  .header {
+    grid-template-columns: 40px 1fr auto;
+  }
+
+  .statusChip {
+    grid-column: auto;
+  }
+
+  .workspace,
+  .resultGrid {
+    grid-template-columns: minmax(0, 1fr) 330px;
+    align-items: start;
+  }
+
+  .labPanel,
+  .recommendPanel,
+  .factPanel {
+    grid-column: 1;
+  }
+
+  .formPanel,
+  .scorePanel,
+  .avoidPanel,
+  .memoPanel,
+  .doneMessage,
+  .actionRow {
+    grid-column: 2;
+  }
+}

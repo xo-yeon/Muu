@@ -12,6 +12,7 @@ const uiText = {
   rewardItem: '\ud68d\ub4dd \uc544\uc774\ud15c',
   aiObservation: 'AI \uad00\ucc30',
   restart: '\ub2e4\uc2dc \ud558\uae30',
+  decisionLab: '\uc774 \uc0c1\ud0dc\ub85c \uacb0\uc815 \uc2e4\ud5d8\uc2e4',
   patternLabel: '\ubc18\ubcf5 \ud328\ud134',
   patternSummary:
     '\uc774\uc804 \uacb0\uacfc\uac00 \uc544\uc9c1 \uc5c6\uc5b4\uc11c \ube44\uad50\ub294 \ub300\uae30 \uc911\uc785\ub2c8\ub2e4. \uc624\ub298 \ub85c\uadf8\ubd80\ud130 \uae30\uc900\uc810\uc73c\ub85c \uc800\uc7a5\ub429\ub2c8\ub2e4.',
@@ -46,10 +47,11 @@ const characterAssetPaths: Record<HumanTypeId, string> = {
 type ResultScreenProps = {
   result: HumanResult;
   analysisError: string | null;
+  onOpenDecisionLab: () => void;
   onRestart: () => void;
 };
 
-export function ResultScreen({ result, analysisError, onRestart }: ResultScreenProps) {
+export function ResultScreen({ result, analysisError, onOpenDecisionLab, onRestart }: ResultScreenProps) {
   const rewardItem = getRewardItem(result);
   const characterAssetPath = characterAssetPaths[result.id];
   const resultHeroStyle = {
@@ -139,6 +141,9 @@ export function ResultScreen({ result, analysisError, onRestart }: ResultScreenP
           {analysisError && <p className={styles.inlineError}>{analysisError}</p>}
           <button className={styles.primaryButton} type="button" onClick={onRestart}>
             {uiText.restart}
+          </button>
+          <button className={styles.secondaryButton} type="button" onClick={onOpenDecisionLab}>
+            {uiText.decisionLab}
           </button>
         </div>
       </article>

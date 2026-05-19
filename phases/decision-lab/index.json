@@ -1,0 +1,30 @@
+{
+  "project": "Muu",
+  "phase": "decision-lab",
+  "steps": [
+    {
+      "step": 0,
+      "name": "decision-model-and-rules",
+      "status": "completed",
+      "summary": "Decision Lab 타입, 저장 파서, 룰 기반 추천 엔진과 테스트 추가"
+    },
+    {
+      "step": 1,
+      "name": "route-and-subdomain",
+      "status": "completed",
+      "summary": "/decision-lab 페이지와 decision/lab 서브도메인 proxy rewrite 추가"
+    },
+    {
+      "step": 2,
+      "name": "decision-ui",
+      "status": "completed",
+      "summary": "결정 실험실 입력/결과 UI와 메인 홈/결과 진입 버튼 추가"
+    },
+    {
+      "step": 3,
+      "name": "docs-and-validation",
+      "status": "completed",
+      "summary": "README와 PRD, ARCHITECTURE, ADR, DESIGN 문서에 Decision Lab 정책 반영"
+    }
+  ]
+}

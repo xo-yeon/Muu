@@ -314,6 +314,31 @@ body {
 }
 ```
 
+#### 4. Decision Lab Layout
+
+결정 실험실 화면에 적합하다. 별도 `/decision-lab` 페이지에서 사용하며, 홈/결과 페이지에는 이동 버튼만 둔다.
+
+- 상단: `DECISION LAB` 헤더, 홈으로 돌아가기 버튼, 현재 인간 유형 칩
+- 좌측/상단: `public/assets/characters/main.png`를 사용한 실험실 대표 이미지와 현재 상태 설명
+- 우측/하단: 고민 주제 입력, 선택지 2~4개 입력 슬롯
+- 결과: 추천 선택지 카드, 팩트 한 줄, 점수 레이어, 피해야 할 선택 패널, 선택 완료/다시 비교하기 버튼
+- 색상과 형태는 기존 Cozy Pixel Tablet UI System의 `bg-rose`, `bg-cream`, `bg-peach`, `pixel-yellow`, 적갈색 border, hard shadow를 그대로 사용한다.
+
+```css
+.decision-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 330px;
+  gap: var(--panel-gap);
+  align-items: start;
+}
+
+@media (max-width: 767px) {
+  .decision-layout {
+    grid-template-columns: 1fr;
+  }
+}
+```
+
 ### Spacing System
 
 | Token | Value | Use |

@@ -3,6 +3,7 @@
 import { useMemo, useState, useSyncExternalStore } from 'react';
 import { questions } from '@/data/questions';
 import { analyzeHumanState } from '@/lib/analysis';
+import { decisionContextStorageKey } from '@/lib/decisionHistory';
 import { selectRandomQuestions } from '@/lib/questionSelection';
 import { buildResultComparison } from '@/lib/resultComparison';
 import {
@@ -12,7 +13,7 @@ import {
   parseStoredResult,
   resultHistoryStorageKey
 } from '@/lib/resultHistory';
-import type { HumanResult, MuuAnswer, MuuSubmission, StoredMuuResult } from '@/types/muu';
+import type { DecisionContext, HumanResult, MuuAnswer, MuuSubmission, StoredMuuResult } from '@/types/muu';
 import { AppShell } from './AppShell';
 import { EmotionScreen } from './EmotionScreen';
 import { FreeTextScreen } from './FreeTextScreen';
@@ -159,6 +160,19 @@ export function MuuApp() {
     setResult(lastResult.result);
     setStep('result');
   };
+
+  const openDecisionLab = () => {
+    const context: DecisionContext = {
+      result: result ?? lastResult?.result ?? null,
+      emotionTagIds,
+      freeText,
+      savedAt: new Date().toISOString()
+    };
+
+    window.localStorage.setItem(decisionContextStorageKey, JSON.stringify(context));
+    window.location.assign('/decision-lab');
+  };
+
   const counterLabel =
     step === 'questions' ? `${questionIndex + 1}/${selectedQuestions.length}` : step === 'result' ? '완료' : '마감';
 
@@ -189,7 +203,14 @@ export function MuuApp() {
           error={analysisError}
         />
       )}
-      {step === 'result' && result && <ResultScreen result={result} analysisError={analysisError} onRestart={start} />}
+      {step === 'result' && result && (
+        <ResultScreen
+          result={result}
+          analysisError={analysisError}
+          onOpenDecisionLab={openDecisionLab}
+          onRestart={start}
+        />
+      )}
     </AppShell>
   );
 }

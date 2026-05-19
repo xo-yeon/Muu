@@ -16,6 +16,8 @@ src/
     globals.css          # 전역 CSS 변수, 기본 body 스타일
     layout.tsx           # 루트 레이아웃, 메타데이터
     page.tsx             # MuuApp 진입점
+    decision-lab/
+      page.tsx           # 결정 실험실 페이지
   components/
     MuuApp.tsx           # MVP 플로우 상태/전환 컨테이너
     AppShell.tsx         # 앱 배경, 태블릿 프레임, 스크롤 컨테이너
@@ -32,6 +34,8 @@ src/
     FreeTextScreen.module.css
     ResultScreen.tsx     # 결과 도감/책 패널 화면
     ResultScreen.module.css
+    DecisionLab.tsx      # 결정 실험실 입력/결과 화면
+    DecisionLab.module.css
     PixelCharacter.tsx   # CSS 기반 픽셀 캐릭터
     PixelCharacter.module.css
     PixelAsset.tsx       # 픽셀 이미지 로딩/대체 표시
@@ -40,6 +44,9 @@ src/
     questions.ts         # 12개 질문과 감정 태그 데이터
   lib/
     analysis.ts          # 룰 기반 분석
+    decisionLab.ts       # 룰 기반 결정 추천
+    decisionHistory.ts   # 결정 실험실 localStorage 파서
+    decisionAiComment.ts # 결정 실험실 AI 보조 코멘트 mock adapter
     openaiObservation.ts # OpenAI 보조 관찰 요청 생성/응답 파싱
     analysis.test.ts     # 분석 로직 테스트
   app/api/
@@ -47,6 +54,7 @@ src/
       route.ts           # OpenAI API 호출 route handler
   types/
     muu.ts               # 도메인 타입
+  proxy.ts               # decision/lab 서브도메인 rewrite
 ```
 
 ## 주요 모듈
@@ -74,6 +82,7 @@ UI는 기능 단위로 분리한다.
 - `EmotionScreen`: 감정 태그 선택과 다음 단계 CTA
 - `FreeTextScreen`: 선택 메모 입력, AI 보조 관찰 안내
 - `ResultScreen`: 결과 타입, 스탯, 상태 레이어, 반복 패턴, 유지/금지 행동, 캐릭터, 보상 아이템
+- `DecisionLab`: 고민 주제와 선택지 2~4개를 입력받고 룰 기반 추천 결과를 표시
 - `PixelCharacter`, `PixelAsset`: 여러 화면에서 쓰는 픽셀 UI 원자 컴포넌트
 
 각 컴포넌트의 스타일은 같은 이름의 `*.module.css`에 둔다. 새 화면/기능 컴포넌트를 추가할 때도 전역 CSS나 다른 컴포넌트 CSS에 스타일을 섞지 않는다.
@@ -110,6 +119,16 @@ type Axis =
 
 동점 또는 복합 상태에서도 `resultPriority` 순서로 결과가 결정되므로 같은 입력은 항상 같은 결과를 반환한다.
 
+### `decisionLab.ts`
+
+결정 실험실 추천 로직은 UI와 분리된 순수 함수로 유지한다.
+
+- 기본 기준: 실행 난이도, 후회 가능성, 지금 상태 적합도, 회복 도움, 장기적 도움
+- 선택지 텍스트의 deterministic keyword signal로 기준별 원점수를 계산한다.
+- 현재 `HumanResult`, 감정 태그, 자유 입력 신호로 기준 가중치를 조정한다.
+- AI는 점수와 추천 선택지를 바꾸지 않는다.
+- 동점은 `stateFit + executionEase`, 입력 순서로 고정 처리한다.
+
 ## 데이터 흐름
 
 ```txt
@@ -129,6 +148,12 @@ localStorage 저장
   -> 홈 최근 결과 / 결과 복원에 사용
 Result
   -> 인간 유형, 유지 행동, 팩트 한 줄, 상태 요약, 픽셀 캐릭터, 획득 아이템 표시
+  -> 결정 실험실 context 저장 후 /decision-lab 이동
+Decision Lab
+  -> 고민 주제와 선택지 2~4개 입력
+  -> buildDecisionResult(session)
+  -> localStorage 최근 결정 결과 저장
+  -> 추천 선택지와 점수 비교 표시
 ```
 
 ## 상태 관리
@@ -142,6 +167,14 @@ Result
 - 자유 입력: `useState<string>`
 - 결과: `useState<HumanResult | null>`
 - 저장된 최근 결과: `useSyncExternalStore`로 localStorage 스냅샷 구독
+
+Decision Lab 페이지는 독립 클라이언트 컴포넌트에서 다음 상태만 관리한다.
+
+- 고민 주제
+- 선택지 입력 2~4개
+- 결과 페이지에서 전달된 `DecisionContext`
+- 현재 `DecisionSession`
+- 현재 `DecisionResult`
 
 Zustand/Jotai는 아직 필요하지 않다. 결과 히스토리, 계정, 서버 동기화가 들어가면 재검토한다.
 
@@ -162,6 +195,16 @@ value: StoredMuuResult JSON
 - 자유 입력
 - 분석 결과
 
+Decision Lab 저장 키:
+
+```txt
+key: muu:v1:decision-context
+value: DecisionContext JSON
+
+key: muu:v1:last-decision-session
+value: StoredDecisionLabResult JSON
+```
+
 ## UI 구조
 
 `DESIGN.md`의 Muu Cozy Pixel Tablet UI System을 기준으로 설계한다.
@@ -173,6 +216,8 @@ value: StoredMuuResult JSON
 - 1025px 이상에서는 태블릿 프레임을 중앙 정렬하고 hard shadow를 적용
 - 연한 핑크 도트 배경, 크림 패널, 적갈색 픽셀 라인 사용
 - 결과 페이지는 책/도감 패널로 구성하고, 좌측에는 결과 제목/스탯/상태 레이어/반복 패턴/행동 가이드를 묶고 우측에는 캐릭터/팩트 한 줄/획득 아이템/AI 관찰을 묶는다.
+- 결정 실험실은 별도 페이지에서 고민 파일, 선택지 레이어, 점수 레이어 느낌으로 구성한다.
+- `decision.*`, `lab.*` 서브도메인은 proxy rewrite로 결정 실험실 페이지를 표시한다.
 - 타이틀/라벨/버튼은 `DungGeunMo.woff` 기반 픽셀 폰트를 사용하고, 긴 본문은 일반 고딕 계열 본문 폰트를 사용한다.
 
 ## 테스트 전략
@@ -182,6 +227,8 @@ value: StoredMuuResult JSON
 - 같은 입력은 같은 결과를 반환한다.
 - 번아웃 성향 답변은 `quietBurnout`으로 분류된다.
 - 자유 입력이 없으면 AI 관찰이 표시되지 않는다.
+- 같은 DecisionSession은 같은 DecisionResult를 반환한다.
+- 인간 유형별 Decision Lab 가중치가 의도대로 추천에 반영된다.
 
 UI 테스트는 아직 없다. 다음 단계에서 질문 플로우, localStorage 저장, 결과 표시를 React Testing Library로 추가할 수 있다.
 

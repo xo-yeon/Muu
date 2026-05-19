@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import type { StoredMuuResult } from '@/types/muu';
 import { PixelAsset } from './PixelAsset';
 import { PixelCharacter } from './PixelCharacter';
@@ -39,6 +40,9 @@ export function HomeScreen({ historyCount, lastResult, onStart, onRestore }: Hom
           <button className={styles.primaryButton} type="button" onClick={onStart}>
             시작하기
           </button>
+          <Link className={styles.secondaryLink} href="/decision-lab">
+            결정 실험실
+          </Link>
         </article>
 
         {lastResult ? (

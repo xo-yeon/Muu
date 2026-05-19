@@ -96,3 +96,63 @@ export type StoredMuuResult = {
   submission: MuuSubmission;
   result: HumanResult;
 };
+
+export type DecisionCriterionId =
+  | 'executionEase'
+  | 'regretSafety'
+  | 'stateFit'
+  | 'recoveryHelp'
+  | 'longTermHelp';
+
+export type DecisionCriterion = {
+  id: DecisionCriterionId;
+  label: string;
+  description: string;
+  direction: 'higherIsBetter';
+};
+
+export type DecisionOption = {
+  id: string;
+  label: string;
+};
+
+export type DecisionContext = {
+  result: HumanResult | null;
+  emotionTagIds: string[];
+  freeText: string;
+  savedAt: string;
+};
+
+export type DecisionSession = {
+  id: string;
+  topic: string;
+  options: DecisionOption[];
+  criteria: DecisionCriterion[];
+  sourceResult: HumanResult | null;
+  emotionTagIds: string[];
+  freeText: string;
+  createdAt: string;
+};
+
+export type DecisionOptionScore = {
+  optionId: string;
+  criteriaScores: Record<DecisionCriterionId, number>;
+  weightedTotal: number;
+  flags: string[];
+};
+
+export type DecisionResult = {
+  recommendedOptionId: string;
+  avoidOptionId?: string;
+  optionScores: DecisionOptionScore[];
+  reason: string;
+  factLine: string;
+  avoidReason: string;
+  aiComment?: string;
+};
+
+export type StoredDecisionLabResult = {
+  savedAt: string;
+  session: DecisionSession;
+  result: DecisionResult;
+};
