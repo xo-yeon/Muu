@@ -109,14 +109,12 @@
 }
 
 .labImage {
+  display: grid;
+  place-items: center;
   min-height: 220px;
   border: 3px solid var(--outline-brown);
   border-radius: 12px;
   background-color: var(--white);
-  background-image: url('/assets/characters/main.png');
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: cover;
   box-shadow: var(--shadow-md);
   image-rendering: pixelated;
   image-rendering: crisp-edges;

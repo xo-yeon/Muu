@@ -3,6 +3,7 @@
 import { useMemo, useState, useSyncExternalStore } from 'react';
 import { questions } from '@/data/questions';
 import { analyzeHumanState } from '@/lib/analysis';
+import { archiveStorageKey, buildNextArchive, parseArchive } from '@/lib/archiveHistory';
 import { decisionContextStorageKey } from '@/lib/decisionHistory';
 import { selectRandomQuestions } from '@/lib/questionSelection';
 import { buildResultComparison } from '@/lib/resultComparison';
@@ -17,15 +18,19 @@ import type { DecisionContext, HumanResult, MuuAnswer, MuuSubmission, StoredMuuR
 import { AppShell } from './AppShell';
 import { EmotionScreen } from './EmotionScreen';
 import { FreeTextScreen } from './FreeTextScreen';
-import { HomeScreen } from './HomeScreen';
 import { QuestionScreen } from './QuestionScreen';
 import { ResultScreen } from './ResultScreen';
 import { TopBar } from './TopBar';
 
-type Step = 'home' | 'questions' | 'emotions' | 'freeText' | 'result';
+type Step = 'questions' | 'emotions' | 'freeText' | 'result';
 
-export function MuuApp() {
-  const [step, setStep] = useState<Step>('home');
+type CheckInAppProps = {
+  restoreLastOnMount?: boolean;
+  onExit?: () => void;
+};
+
+export function CheckInApp({ restoreLastOnMount = false, onExit = navigateHome }: CheckInAppProps) {
+  const [step, setStep] = useState<Step>('questions');
   const [questionIndex, setQuestionIndex] = useState(0);
   const [selectedQuestions, setSelectedQuestions] = useState(() => selectRandomQuestions(questions));
   const [answers, setAnswers] = useState<MuuAnswer[]>([]);
@@ -34,36 +39,37 @@ export function MuuApp() {
   const [result, setResult] = useState<HumanResult | null>(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [analysisError, setAnalysisError] = useState<string | null>(null);
+  const [hasDismissedInitialRestore, setHasDismissedInitialRestore] = useState(false);
   const persistedResultJson = useStoredValue(lastResultStorageKey);
-  const persistedHistoryJson = useStoredValue(resultHistoryStorageKey);
   const persistedResult = useMemo(() => parseStoredResult(persistedResultJson), [persistedResultJson]);
-  const persistedHistory = useMemo(() => parseResultHistory(persistedHistoryJson), [persistedHistoryJson]);
   const [lastResultOverride, setLastResultOverride] = useState<StoredMuuResult | null>(null);
-  const [historyOverride, setHistoryOverride] = useState<StoredMuuResult[] | null>(null);
   const lastResult = lastResultOverride ?? persistedResult;
-  const resultHistory = historyOverride ?? persistedHistory;
+  const restoredResult = restoreLastOnMount && !hasDismissedInitialRestore ? lastResult : null;
+  const displayStep: Step = restoredResult && !result && step === 'questions' ? 'result' : step;
+  const displayResult = result ?? restoredResult?.result ?? null;
 
   const progress = useMemo(() => {
-    if (step === 'questions') {
+    if (displayStep === 'questions') {
       return ((questionIndex + 1) / selectedQuestions.length) * 100;
     }
 
-    if (step === 'emotions') {
+    if (displayStep === 'emotions') {
       return 94;
     }
 
-    if (step === 'freeText') {
+    if (displayStep === 'freeText') {
       return 98;
     }
 
-    if (step === 'result') {
+    if (displayStep === 'result') {
       return 100;
     }
 
     return 0;
-  }, [questionIndex, selectedQuestions.length, step]);
+  }, [displayStep, questionIndex, selectedQuestions.length]);
 
   const start = () => {
+    setHasDismissedInitialRestore(true);
     setSelectedQuestions(selectRandomQuestions(questions));
     setStep('questions');
     setQuestionIndex(0);
@@ -88,23 +94,28 @@ export function MuuApp() {
   };
 
   const goBack = () => {
-    if (step === 'questions' && questionIndex > 0) {
+    if (displayStep === 'questions' && questionIndex > 0) {
       setQuestionIndex((current) => current - 1);
       return;
     }
 
-    if (step === 'emotions') {
+    if (displayStep === 'questions') {
+      onExit();
+      return;
+    }
+
+    if (displayStep === 'emotions') {
       setStep('questions');
       setQuestionIndex(selectedQuestions.length - 1);
       return;
     }
 
-    if (step === 'freeText') {
+    if (displayStep === 'freeText') {
       setStep('emotions');
       return;
     }
 
-    setStep('home');
+    onExit();
   };
 
   const toggleEmotion = (tagId: string) => {
@@ -138,34 +149,25 @@ export function MuuApp() {
       result: resultWithAi
     };
     const nextHistory = buildNextResultHistory(stored, previousHistory);
+    const previousArchive = parseArchive(window.localStorage.getItem(archiveStorageKey));
+    const nextArchive = buildNextArchive(stored, previousArchive);
 
     window.localStorage.setItem(lastResultStorageKey, JSON.stringify(stored));
     window.localStorage.setItem(resultHistoryStorageKey, JSON.stringify(nextHistory));
+    window.localStorage.setItem(archiveStorageKey, JSON.stringify(nextArchive));
     setResult(resultWithAi);
     setLastResultOverride(stored);
-    setHistoryOverride(nextHistory);
     setAnalysisError(aiResponse.error ?? null);
     setIsAnalyzing(false);
     setStep('result');
   };
 
-  const restoreLast = () => {
-    if (!lastResult) {
-      return;
-    }
-
-    setAnswers(lastResult.submission.answers);
-    setEmotionTagIds(lastResult.submission.emotionTagIds);
-    setFreeText(lastResult.submission.freeText);
-    setResult(lastResult.result);
-    setStep('result');
-  };
-
   const openDecisionLab = () => {
+    const restoredSubmission = restoredResult?.submission;
     const context: DecisionContext = {
-      result: result ?? lastResult?.result ?? null,
-      emotionTagIds,
-      freeText,
+      result: displayResult,
+      emotionTagIds: restoredSubmission?.emotionTagIds ?? emotionTagIds,
+      freeText: restoredSubmission?.freeText ?? freeText,
       savedAt: new Date().toISOString()
     };
 
@@ -174,16 +176,13 @@ export function MuuApp() {
   };
 
   const counterLabel =
-    step === 'questions' ? `${questionIndex + 1}/${selectedQuestions.length}` : step === 'result' ? '완료' : '마감';
+    displayStep === 'questions' ? `${questionIndex + 1}/${selectedQuestions.length}` : displayStep === 'result' ? '완료' : '마감';
 
   return (
-    <AppShell isHome={step === 'home'}>
-      {step !== 'home' && <TopBar counterLabel={counterLabel} progress={progress} onBack={goBack} />}
+    <AppShell isHome={false}>
+      <TopBar counterLabel={counterLabel} progress={progress} onBack={goBack} />
 
-      {step === 'home' && (
-        <HomeScreen historyCount={resultHistory.length} lastResult={lastResult} onStart={start} onRestore={restoreLast} />
-      )}
-      {step === 'questions' && (
+      {displayStep === 'questions' && (
         <QuestionScreen
           question={selectedQuestions[questionIndex]}
           questionIndex={questionIndex}
@@ -191,10 +190,10 @@ export function MuuApp() {
           onSelect={selectOption}
         />
       )}
-      {step === 'emotions' && (
+      {displayStep === 'emotions' && (
         <EmotionScreen selectedIds={emotionTagIds} onToggle={toggleEmotion} onNext={() => setStep('freeText')} />
       )}
-      {step === 'freeText' && (
+      {displayStep === 'freeText' && (
         <FreeTextScreen
           value={freeText}
           onChange={setFreeText}
@@ -203,9 +202,9 @@ export function MuuApp() {
           error={analysisError}
         />
       )}
-      {step === 'result' && result && (
+      {displayStep === 'result' && displayResult && (
         <ResultScreen
-          result={result}
+          result={displayResult}
           analysisError={analysisError}
           onOpenDecisionLab={openDecisionLab}
           onRestart={start}
@@ -213,6 +212,10 @@ export function MuuApp() {
       )}
     </AppShell>
   );
+}
+
+function navigateHome() {
+  window.location.assign('/');
 }
 
 async function fetchAiObservation(submission: MuuSubmission): Promise<{ aiObservation?: string; error?: string }> {
@@ -248,7 +251,15 @@ function useStoredValue(key: string) {
 
       return () => window.removeEventListener('storage', onStoreChange);
     },
-    () => window.localStorage.getItem(key),
+    () => readStoredValue(key),
     () => null
   );
+}
+
+function readStoredValue(key: string): string | null {
+  try {
+    return window.localStorage?.getItem(key) ?? null;
+  } catch {
+    return null;
+  }
 }

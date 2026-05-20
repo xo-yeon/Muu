@@ -15,11 +15,16 @@ src/
   app/
     globals.css          # 전역 CSS 변수, 기본 body 스타일
     layout.tsx           # 루트 레이아웃, 메타데이터
-    page.tsx             # MuuApp 진입점
+    page.tsx             # HomeApp 진입점
+    check-in/
+      page.tsx           # 오늘의 인간 상태 체크 플로우 페이지
+    archive/
+      page.tsx           # 날짜별 감정 기록 아카이브 페이지
     decision-lab/
       page.tsx           # 결정 실험실 페이지
   components/
-    MuuApp.tsx           # MVP 플로우 상태/전환 컨테이너
+    HomeApp.tsx          # 루트 홈 상태/최근 결과 복원 이동 컨테이너
+    CheckInApp.tsx       # 상태 체크 플로우 상태/전환 컨테이너
     AppShell.tsx         # 앱 배경, 태블릿 프레임, 스크롤 컨테이너
     AppShell.module.css
     TopBar.tsx           # 이전 버튼, 진행률, 단계 카운터
@@ -34,6 +39,8 @@ src/
     FreeTextScreen.module.css
     ResultScreen.tsx     # 결과 도감/책 패널 화면
     ResultScreen.module.css
+    ArchiveScreen.tsx    # 날짜별 감정 기록 아카이브 화면
+    ArchiveScreen.module.css
     DecisionLab.tsx      # 결정 실험실 입력/결과 화면
     DecisionLab.module.css
     PixelCharacter.tsx   # CSS 기반 픽셀 캐릭터
@@ -47,8 +54,10 @@ src/
     decisionLab.ts       # 룰 기반 결정 추천
     decisionHistory.ts   # 결정 실험실 localStorage 파서
     decisionAiComment.ts # 결정 실험실 AI 보조 코멘트 mock adapter
+    archiveHistory.ts    # 날짜별 감정 기록 localStorage 파서/빌더
     openaiObservation.ts # OpenAI 보조 관찰 요청 생성/응답 파싱
     analysis.test.ts     # 분석 로직 테스트
+    archiveHistory.test.ts
   app/api/
     ai-observation/
       route.ts           # OpenAI API 호출 route handler
@@ -59,17 +68,20 @@ src/
 
 ## 주요 모듈
 
-### `MuuApp`
+### `CheckInApp`
 
-클라이언트 컴포넌트이며 MVP 플로우의 상태와 전환만 관리한다. 화면별 UI는 `HomeScreen`, `QuestionScreen`, `EmotionScreen`, `FreeTextScreen`, `ResultScreen` 컴포넌트로 분리한다.
+`/check-in`에서 렌더링되는 클라이언트 컴포넌트이며 MVP 플로우의 상태와 전환만 관리한다. 화면별 UI는 `QuestionScreen`, `EmotionScreen`, `FreeTextScreen`, `ResultScreen` 컴포넌트로 분리한다.
 
-- `home`: 시작 화면, 최근 결과 카드
 - `questions`: 12개 질문을 한 번에 하나씩 표시
 - `emotions`: 감정 태그 다중 선택
 - `freeText`: 선택형 자유 입력
 - `result`: 결과 페이지
 
 질문 진행률은 현재 단계와 질문 인덱스 기반으로 계산한다.
+
+### `HomeApp`
+
+`/`에서 렌더링되는 클라이언트 컴포넌트이며 `HomeScreen`에 최근 결과와 기록 수를 전달한다. 시작 CTA는 `/check-in`, 최근 결과 복원은 `/check-in?restore=last`로 이동한다.
 
 ### UI 컴포넌트
 
@@ -82,6 +94,7 @@ UI는 기능 단위로 분리한다.
 - `EmotionScreen`: 감정 태그 선택과 다음 단계 CTA
 - `FreeTextScreen`: 선택 메모 입력, AI 보조 관찰 안내
 - `ResultScreen`: 결과 타입, 스탯, 상태 레이어, 반복 패턴, 유지/금지 행동, 캐릭터, 보상 아이템
+- `ArchiveScreen`: localStorage에 저장된 Muu 결과를 날짜별로 묶어 요약, 날짜 그리드, 선택 날짜 상세를 표시
 - `DecisionLab`: 고민 주제와 선택지 2~4개를 입력받고 룰 기반 추천 결과를 표시
 - `PixelCharacter`, `PixelAsset`: 여러 화면에서 쓰는 픽셀 UI 원자 컴포넌트
 
@@ -133,7 +146,9 @@ type Axis =
 
 ```txt
 Home
-  -> 사용자가 시작
+  -> 사용자가 시작하면 /check-in 이동
+Check-in
+  -> /check-in?restore=last 이면 최근 결과 복원
 Questions
   -> 12개 선택 답변 저장
 Emotion Tags
@@ -145,7 +160,7 @@ analyzeHumanState(submission)
 OpenAI observation
   -> 자유 입력이 있으면 /api/ai-observation 호출
 localStorage 저장
-  -> 홈 최근 결과 / 결과 복원에 사용
+  -> 홈 최근 결과 / 결과 복원 / 날짜별 아카이브에 사용
 Result
   -> 인간 유형, 유지 행동, 팩트 한 줄, 상태 요약, 픽셀 캐릭터, 획득 아이템 표시
   -> 결정 실험실 context 저장 후 /decision-lab 이동
@@ -185,6 +200,12 @@ Zustand/Jotai는 아직 필요하지 않다. 결과 히스토리, 계정, 서버
 ```txt
 key: muu:v1:last-result
 value: StoredMuuResult JSON
+
+key: muu:v1:result-history
+value: StoredMuuResult[] JSON
+
+key: muu:v1:archive
+value: MuuArchive JSON
 ```
 
 저장 데이터:
@@ -194,6 +215,22 @@ value: StoredMuuResult JSON
 - 감정 태그
 - 자유 입력
 - 분석 결과
+
+Archive 저장 구조:
+
+```ts
+type ArchiveEntry = StoredMuuResult;
+
+type DailyArchive = {
+  dateKey: string;
+  entries: ArchiveEntry[];
+  lastEntry: ArchiveEntry;
+};
+
+type MuuArchive = Record<string, DailyArchive>;
+```
+
+Archive의 `dateKey`는 `savedAt.slice(0, 10)` 기준 `YYYY-MM-DD` 문자열이다. 같은 `savedAt`을 가진 결과는 중복 저장하지 않고, 같은 날짜의 `entries`는 최신순으로 정렬한다.
 
 Decision Lab 저장 키:
 
@@ -227,6 +264,7 @@ value: StoredDecisionLabResult JSON
 - 같은 입력은 같은 결과를 반환한다.
 - 번아웃 성향 답변은 `quietBurnout`으로 분류된다.
 - 자유 입력이 없으면 AI 관찰이 표시되지 않는다.
+- Archive 저장은 날짜별 정렬, 중복 제거, 최신 결과 계산을 deterministic helper 테스트로 검증한다.
 - 같은 DecisionSession은 같은 DecisionResult를 반환한다.
 - 인간 유형별 Decision Lab 가중치가 의도대로 추천에 반영된다.
 

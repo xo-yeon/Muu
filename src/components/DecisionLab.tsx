@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useMemo, useState } from 'react';
+import { getCharacterAssetPath } from '@/lib/characterAssets';
 import { generateDecisionAiMockComment } from '@/lib/decisionAiComment';
 import { buildDecisionResult, defaultDecisionCriteria } from '@/lib/decisionLab';
 import {
@@ -12,6 +13,8 @@ import {
 import { lastResultStorageKey, parseStoredResult } from '@/lib/resultHistory';
 import type { DecisionContext, DecisionResult, DecisionSession, StoredDecisionLabResult } from '@/types/muu';
 import { AppShell } from './AppShell';
+import { PixelAsset } from './PixelAsset';
+import { PixelCharacter } from './PixelCharacter';
 import styles from './DecisionLab.module.css';
 
 const maxTopicLength = 120;
@@ -140,7 +143,23 @@ function DecisionInput({
   return (
     <section className={styles.workspace}>
       <article className={styles.labPanel}>
-        <div className={styles.labImage} aria-hidden="true" />
+        <div className={styles.labImage}>
+          {context?.result ? (
+            <PixelAsset
+              alt={`${context.result.typeName} 도트 캐릭터`}
+              fallback={<PixelCharacter body={context.result.character.body} mood={context.result.character.mood} size="large" />}
+              src={getCharacterAssetPath(context.result.id)}
+              variant="home"
+            />
+          ) : (
+            <PixelAsset
+              alt="중립 상태 도트 캐릭터"
+              fallback={<PixelCharacter body="stable" mood="중립 상태" size="large" />}
+              src="/assets/characters/main.png"
+              variant="home"
+            />
+          )}
+        </div>
         <span className={styles.kicker}>CURRENT FILE</span>
         <h2>지금 상태로 선택지를 비교합니다</h2>
         <p>

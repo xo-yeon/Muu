@@ -66,10 +66,15 @@
   text-align: left;
   background: var(--bg-lavender);
   font-family: var(--font-body);
+  justify-items: start;
   transition:
     transform 90ms steps(2, end),
     box-shadow 90ms steps(2, end),
     background 90ms steps(2, end);
+}
+
+.secondaryRoadmap img {
+  justify-self: center;
 }
 
 .secondaryRoadmap:active {

@@ -1,5 +1,7 @@
 import type { CSSProperties } from 'react';
-import type { HumanResult, HumanTypeId, RewardItem } from '@/types/muu';
+import Link from 'next/link';
+import { getCharacterAssetPath } from '@/lib/characterAssets';
+import type { HumanResult, RewardItem } from '@/types/muu';
 import { PixelAsset } from './PixelAsset';
 import pixelAssetStyles from './PixelAsset.module.css';
 import styles from './ResultScreen.module.css';
@@ -11,8 +13,9 @@ const uiText = {
   forbiddenAction: '\uc624\ub298\uc758 \uae08\uc9c0 \ud589\ub3d9',
   rewardItem: '\ud68d\ub4dd \uc544\uc774\ud15c',
   aiObservation: 'AI \uad00\ucc30',
-  restart: '\ub2e4\uc2dc \ud558\uae30',
-  decisionLab: '\uc774 \uc0c1\ud0dc\ub85c \uacb0\uc815 \uc2e4\ud5d8\uc2e4',
+  restart: '\ub2e4\uc2dc \uce21\uc815\ud558\uae30',
+  archive: '\uae30\ub85d \ubcf4\ub7ec\uac00\uae30',
+  decisionLab: '\uacb0\uc815 \uc2e4\ud5d8\uc2e4\ub85c \uac00\uc838\uac00\uae30',
   patternLabel: '\ubc18\ubcf5 \ud328\ud134',
   patternSummary:
     '\uc774\uc804 \uacb0\uacfc\uac00 \uc544\uc9c1 \uc5c6\uc5b4\uc11c \ube44\uad50\ub294 \ub300\uae30 \uc911\uc785\ub2c8\ub2e4. \uc624\ub298 \ub85c\uadf8\ubd80\ud130 \uae30\uc900\uc810\uc73c\ub85c \uc800\uc7a5\ub429\ub2c8\ub2e4.',
@@ -21,27 +24,6 @@ const uiText = {
   fallbackItemName: '\uc784\uc2dc \uc778\uac04 \uc720\uc9c0 \ud0a4\ud2b8',
   fallbackItemDescription:
     '\uc624\ub798\ub41c \uacb0\uacfc\uc5d0\ub3c4 \uc9c0\uae09\ub418\ub294 \uae30\ubcf8 \uc544\uc774\ud15c\uc785\ub2c8\ub2e4. \uc77c\ub2e8 \ubb3c\ubd80\ud130 \ub9c8\uc2dc\uba74 \ub429\ub2c8\ub2e4.'
-};
-
-const characterAssetPaths: Record<HumanTypeId, string> = {
-  overheatedPlanner: '/assets/characters/overheatedPlanner.png',
-  quietBurnout: '/assets/characters/quietBurnout.png',
-  futureBuffering: '/assets/characters/futureBuffering.png',
-  survivalMode: '/assets/characters/survivalMode.png',
-  dopamineScroller: '/assets/characters/dopamineScroller.png',
-  unexpectedlyOkay: '/assets/characters/unexpectedlyOkay.png',
-  emotionalWave: '/assets/characters/emotionalWave.png',
-  softSystemOverload: '/assets/characters/softSystemOverload.png',
-  excuseBlacksmith: '/assets/characters/excuseBlacksmith.png',
-  procrastinationSlime: '/assets/characters/procrastinationSlime.png',
-  anxietyWizard: '/assets/characters/anxietyWizard.png',
-  dopamineGoblin: '/assets/characters/dopamineGoblin.png',
-  planningMaxNewbie: '/assets/characters/planningMaxNewbie.png',
-  emotionTank: '/assets/characters/emotionTank.png',
-  realityEscapeAssassin: '/assets/characters/realityEscapeAssassin.png',
-  rationalizationAlchemist: '/assets/characters/rationalizationAlchemist.png',
-  blameSummoner: '/assets/characters/blameSummoner.png',
-  paperArmorMental: '/assets/characters/paperArmorMental.png'
 };
 
 type ResultScreenProps = {
@@ -53,7 +35,7 @@ type ResultScreenProps = {
 
 export function ResultScreen({ result, analysisError, onOpenDecisionLab, onRestart }: ResultScreenProps) {
   const rewardItem = getRewardItem(result);
-  const characterAssetPath = characterAssetPaths[result.id];
+  const characterAssetPath = getCharacterAssetPath(result.id);
   const resultHeroStyle = {
     '--character-image': `url(${characterAssetPath})`
   } as CSSProperties;
@@ -139,11 +121,14 @@ export function ResultScreen({ result, analysisError, onOpenDecisionLab, onResta
             </section>
           )}
           {analysisError && <p className={styles.inlineError}>{analysisError}</p>}
-          <button className={styles.primaryButton} type="button" onClick={onRestart}>
-            {uiText.restart}
-          </button>
+          <Link className={styles.primaryButton} href="/archive">
+            {uiText.archive}
+          </Link>
           <button className={styles.secondaryButton} type="button" onClick={onOpenDecisionLab}>
             {uiText.decisionLab}
+          </button>
+          <button className={styles.secondaryButton} type="button" onClick={onRestart}>
+            {uiText.restart}
           </button>
         </div>
       </article>

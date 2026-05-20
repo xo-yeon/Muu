@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { getCharacterAssetPath } from '@/lib/characterAssets';
 import type { StoredMuuResult } from '@/types/muu';
 import { PixelAsset } from './PixelAsset';
 import { PixelCharacter } from './PixelCharacter';
@@ -38,8 +39,11 @@ export function HomeScreen({ historyCount, lastResult, onStart, onRestore }: Hom
             <strong>감정 태그와 한 줄 메모 붙이기</strong>
           </div>
           <button className={styles.primaryButton} type="button" onClick={onStart}>
-            시작하기
+            오늘의 Muu 시작하기
           </button>
+          <Link className={styles.secondaryLink} href="/archive">
+            Archive 보기
+          </Link>
           <Link className={styles.secondaryLink} href="/decision-lab">
             결정 실험실
           </Link>
@@ -47,6 +51,12 @@ export function HomeScreen({ historyCount, lastResult, onStart, onRestore }: Hom
 
         {lastResult ? (
           <button className={`${styles.roadmapCard} ${styles.secondaryRoadmap}`} type="button" onClick={onRestore}>
+            <PixelAsset
+              alt={`${lastResult.result.typeName} 도트 캐릭터`}
+              fallback={<PixelCharacter body={lastResult.result.character.body} mood={lastResult.result.character.mood} size="small" />}
+              src={getCharacterAssetPath(lastResult.result.id)}
+              variant="home"
+            />
             <span className={styles.kicker}>TODAY FILE</span>
             <strong>{lastResult.result.typeName}</strong>
             <p>{lastResult.result.factLine}</p>

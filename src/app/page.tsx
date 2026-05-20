@@ -1,5 +1,5 @@
-import { MuuApp } from '@/components/MuuApp';
+import { HomeApp } from '@/components/HomeApp';
 
 export default function Home() {
-  return <MuuApp />;
+  return <HomeApp />;
 }

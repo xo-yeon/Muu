@@ -13,6 +13,10 @@ Muu는 오늘의 감정과 행동 패턴을 바탕으로 인간 유형과 상태
 - 같은 입력이면 항상 같은 결과를 반환하는 deterministic 분석 로직
 - OpenAI API 기반 보조 관찰
 - localStorage 최근 결과 저장/복원
+- `/check-in` 오늘의 인간 상태 체크 플로우
+- `/archive` 날짜별 감정 기록 아카이브
+  - 저장된 Muu 결과를 날짜별로 묶어 확인
+  - 날짜 그리드, 기록 요약, 선택 날짜 상세 표시
 - `/decision-lab` 결정 실험실
   - 고민 주제와 선택지 2~4개 비교
   - 현재 인간 유형/감정 태그/자유 입력 context 반영
@@ -49,7 +53,9 @@ npm run build
 
 ## Routes
 
-- `/`: Muu 상태 체크 앱
+- `/`: Muu 홈
+- `/check-in`: 오늘의 인간 상태 체크 앱
+- `/archive`: 날짜별 감정 기록 아카이브
 - `/decision-lab`: 결정 실험실
 - `decision.*`, `lab.*`: 배포 환경에서 도메인이 연결되면 결정 실험실로 rewrite
 

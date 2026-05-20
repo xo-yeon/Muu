@@ -1,9 +1,21 @@
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { questions } from '@/data/questions';
 import { questionSessionSize, selectRandomQuestions } from './questionSelection';
 
 describe('selectRandomQuestions', () => {
-  it('selects ten unique questions by default', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it('does not use Math.random for the default question order', () => {
+    vi.spyOn(Math, 'random').mockImplementation(() => {
+      throw new Error('Math.random should not be used by default');
+    });
+
+    expect(() => selectRandomQuestions(questions)).not.toThrow();
+  });
+
+  it('selects twelve unique questions by default', () => {
     const selected = selectRandomQuestions(questions, questionSessionSize, () => 0.5);
     const ids = selected.map((question) => question.id);
 
