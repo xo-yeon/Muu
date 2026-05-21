@@ -67,6 +67,7 @@
   background: var(--bg-lavender);
   font-family: var(--font-body);
   justify-items: start;
+  align-content: start;
   transition:
     transform 90ms steps(2, end),
     box-shadow 90ms steps(2, end),
@@ -75,6 +76,8 @@
 
 .secondaryRoadmap img {
   justify-self: center;
+  width: 100%;
+  height: auto;
 }
 
 .secondaryRoadmap:active {
